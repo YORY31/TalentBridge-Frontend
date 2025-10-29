@@ -1,28 +1,25 @@
-// LOGIN
-export async function login({ email, password }) {
-  // Aquí iría la llamada a tu backend
-  // Por ahora hacemos un mock simple
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (email === "test@correo.com" && password === "123456") {
-        resolve({ message: "Login exitoso", user: { email } });
-      } else {
-        reject(new Error("Correo o contraseña incorrectos"));
-      }
-    }, 500);
-  });
-}
+import axios from "axios";
+import { API_URL } from "./apiConfing";
 
-// REGISTER
-export async function register({ name, email, password }) {
-  // Mock de registro
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (email && password && name) {
-        resolve({ message: "Registro exitoso", user: { name, email } });
-      } else {
-        reject(new Error("Faltan datos"));
-      }
-    }, 500);
-  });
-}
+// 🔹 Registro
+export const registerUser = async (userData) => {
+  try {
+    const response = await axios.post(`${API_URL}/Auth/register`, userData);
+    return response.data;
+  } catch (error) {
+    console.error("Error al registrar:", error);
+    throw error;
+  }
+};
+
+
+// 🔹 Login
+export const loginUser = async (credentials) => {
+  try {
+    const response = await axios.post(`${API_URL}/Auth/login`, credentials);
+    return response.data;
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+    throw error;
+  }
+};

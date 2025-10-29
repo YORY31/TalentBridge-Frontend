@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../services/authServices";
 
 export default function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -7,7 +8,7 @@ export default function Login({ setIsLoggedIn }) {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -15,9 +16,19 @@ export default function Login({ setIsLoggedIn }) {
       return;
     }
 
-    // Simulación de inicio de sesión exitoso
-    setIsLoggedIn(true);
-    navigate("/"); // Redirige a Home
+    try {
+      const result = await loginUser({ email, password });
+
+      if (result.token) {
+        localStorage.setItem("token", result.token);
+        setIsLoggedIn(true);
+        navigate("/"); // Redirige a Home o Dashboard
+      } else {
+        setMessage("Credenciales incorrectas");
+      }
+    } catch (error) {
+      setMessage("Error al iniciar sesión. Verifica tus datos.");
+    }
   };
 
   return (
@@ -32,6 +43,7 @@ export default function Login({ setIsLoggedIn }) {
             Encuentra una comunidad afín en tu búsqueda de oportunidades y pasantías.
           </p>
         </div>
+
         <div className="w-full max-w-md mx-auto">
           <div className="bg-white/70 p-8 rounded-2xl shadow-xl backdrop-blur-lg border border-white/30">
             <div className="flex justify-center mb-6">
@@ -41,9 +53,11 @@ export default function Login({ setIsLoggedIn }) {
                 </span>
               </div>
             </div>
+
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">
               Iniciar Sesión
             </h2>
+
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="relative">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
@@ -58,6 +72,7 @@ export default function Login({ setIsLoggedIn }) {
                   required
                 />
               </div>
+
               <div className="relative">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
                   lock
@@ -71,13 +86,16 @@ export default function Login({ setIsLoggedIn }) {
                   required
                 />
               </div>
-              {message && <p className="text-red-500">{message}</p>}
+
+              {message && <p className="text-red-500 text-sm">{message}</p>}
+
               <button
                 type="submit"
                 className="group relative w-full flex justify-center rounded-lg bg-gray-600 px-4 py-3 text-base font-bold text-white transition-all duration-300 hover:bg-gray-700"
               >
                 Iniciar sesión
               </button>
+
               <div className="text-center text-sm text-gray-500">
                 ¿No tienes una cuenta?{" "}
                 <Link
@@ -94,5 +112,3 @@ export default function Login({ setIsLoggedIn }) {
     </div>
   );
 }
-
-
