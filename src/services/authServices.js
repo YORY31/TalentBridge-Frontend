@@ -23,3 +23,16 @@ export const loginUser = async (credentials) => {
     throw error;
   }
 };
+
+// 🔹 Obtener perfil del usuario
+export const getProfile = async (token) => {
+  try {
+    const response = await axios.get(`${API_URL}/Auth/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener perfil:", error);
+    throw error;
+  }
+};
