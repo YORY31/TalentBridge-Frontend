@@ -30,11 +30,31 @@ export default function UsersManagement() {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const response = await getAllUsers();
-      setUsers(response.data || []);
+      const usersData = await getAllUsers();
+      
+      console.log("Datos recibidos de API:", usersData);
+      
+      if (Array.isArray(usersData)) {
+        setUsers(usersData);
+        if (usersData.length === 0) {
+          setMessage({ type: "info", text: "No hay usuarios registrados en el sistema" });
+        }
+      } else {
+        console.error("Los datos no son un array:", usersData);
+        setUsers([]);
+        setMessage({ 
+          type: "error", 
+          text: "Error: Los datos recibidos no tienen el formato esperado" 
+        });
+      }
+      
     } catch (error) {
       console.error("Error loading users:", error);
-      setMessage({ type: "error", text: "Error al cargar usuarios" });
+      setUsers([]);
+      setMessage({ 
+        type: "error", 
+        text: `Error al cargar usuarios: ${error.message}` 
+      });
     } finally {
       setLoading(false);
     }
@@ -54,7 +74,7 @@ export default function UsersManagement() {
       setTimeout(() => setMessage({ type: "", text: "" }), 3000);
     } catch (error) {
       console.error("Error updating user:", error);
-      setMessage({ type: "error", text: "Error al actualizar usuario" });
+      setMessage({ type: "error", text: error.message });
     }
   };
 
@@ -71,20 +91,23 @@ export default function UsersManagement() {
       setTimeout(() => setMessage({ type: "", text: "" }), 3000);
     } catch (error) {
       console.error("Error deleting user:", error);
-      setMessage({ type: "error", text: "Error al eliminar usuario" });
+      setMessage({ type: "error", text: error.message });
     }
   };
 
   const handleToggleStatus = async (user) => {
     try {
-      await updateUser(user.id, { active: !user.active });
-      setMessage({ type: "success", text: `Usuario ${!user.active ? "activado" : "desactivado"} correctamente` });
+      await updateUser(user.id, { isActive: !user.isActive });
+      setMessage({ 
+        type: "success", 
+        text: `Usuario ${!user.isActive ? "activado" : "desactivado"} correctamente` 
+      });
       loadUsers();
       
       setTimeout(() => setMessage({ type: "", text: "" }), 3000);
     } catch (error) {
       console.error("Error toggling user status:", error);
-      setMessage({ type: "error", text: "Error al cambiar estado del usuario" });
+      setMessage({ type: "error", text: error.message });
     }
   };
 
@@ -98,21 +121,20 @@ export default function UsersManagement() {
       setTimeout(() => setMessage({ type: "", text: "" }), 3000);
     } catch (error) {
       console.error("Error creating admin:", error);
-      setMessage({ type: "error", text: "Error al crear administrador" });
+      setMessage({ type: "error", text: error.message });
     }
   };
 
   // Filtrar usuarios
   const filteredUsers = users.filter(user => {
     const matchesSearch = 
-      user.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.phoneNumber?.includes(searchTerm);
+      (user.fullName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.email || "").toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesRole = roleFilter === "all" || user.role === roleFilter;
     const matchesStatus = statusFilter === "all" || 
-      (statusFilter === "active" && user.active) ||
-      (statusFilter === "inactive" && !user.active);
+      (statusFilter === "active" && user.isActive) ||
+      (statusFilter === "inactive" && !user.isActive);
     
     return matchesSearch && matchesRole && matchesStatus;
   });
@@ -128,7 +150,8 @@ export default function UsersManagement() {
     Admin: "bg-red-100 text-red-800",
     Student: "bg-blue-100 text-blue-800",
     Mentor: "bg-green-100 text-green-800",
-    Employer: "bg-purple-100 text-purple-800"
+    Employer: "bg-purple-100 text-purple-800",
+    User: "bg-gray-100 text-gray-800"
   };
 
   if (loading) {
@@ -146,7 +169,7 @@ export default function UsersManagement() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Gestión de Usuarios</h1>
           <p className="text-gray-600 mt-2">
-            Administra todos los usuarios del sistema ({filteredUsers.length} usuarios)
+            {filteredUsers.length} usuario{filteredUsers.length !== 1 ? 's' : ''} encontrado{filteredUsers.length !== 1 ? 's' : ''}
           </p>
         </div>
         
@@ -189,7 +212,7 @@ export default function UsersManagement() {
               </svg>
               <input
                 type="text"
-                placeholder="Buscar por nombre, email o teléfono..."
+                placeholder="Buscar por nombre o email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
@@ -207,6 +230,7 @@ export default function UsersManagement() {
             >
               <option value="all">Todos los roles</option>
               <option value="Admin">Administrador</option>
+              <option value="User">Usuario</option>
               <option value="Student">Estudiante</option>
               <option value="Mentor">Mentor</option>
               <option value="Employer">Empleador</option>
@@ -238,95 +262,96 @@ export default function UsersManagement() {
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Usuario</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Rol</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Estado</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Verificación</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Registro</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {paginatedUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                        {user.fullName?.charAt(0) || "U"}
+              {paginatedUsers.length > 0 ? (
+                paginatedUsers.map((user) => (
+                  <tr key={user.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                          {user.fullName?.charAt(0) || "U"}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{user.fullName || "Sin nombre"}</p>
+                          <p className="text-sm text-gray-500">{user.email}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-gray-900">{user.fullName}</p>
-                        <p className="text-sm text-gray-500">{user.email}</p>
-                        {user.phoneNumber && (
-                          <p className="text-xs text-gray-400">{user.phoneNumber}</p>
-                        )}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${roleColors[user.role] || "bg-gray-100 text-gray-800"}`}>
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <button
-                      onClick={() => handleToggleStatus(user)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        user.active 
-                          ? "bg-green-100 text-green-800 hover:bg-green-200"
-                          : "bg-red-100 text-red-800 hover:bg-red-200"
-                      }`}
-                    >
-                      {user.active ? "Activo" : "Inactivo"}
-                    </button>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      user.verified 
-                        ? "bg-green-100 text-green-800" 
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}>
-                      {user.verified ? "Verificado" : "No verificado"}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {new Date(user.createdAt).toLocaleDateString("es-ES")}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center space-x-2">
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${roleColors[user.role] || "bg-gray-100 text-gray-800"}`}>
+                        {user.role || "No definido"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
                       <button
-                        onClick={() => navigate(`/admin/users/${user.id}`)}
-                        className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
-                        title="Ver detalles"
+                        onClick={() => handleToggleStatus(user)}
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          user.isActive 
+                            ? "bg-green-100 text-green-800 hover:bg-green-200"
+                            : "bg-red-100 text-red-800 hover:bg-red-200"
+                        }`}
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
+                        {user.isActive ? "Activo" : "Inactivo"}
                       </button>
-                      
-                      <button
-                        onClick={() => handleEditUser(user)}
-                        className="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg"
-                        title="Editar usuario"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </button>
-                      
-                      {user.id !== currentUser?.id && (
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {user.createdAt ? new Date(user.createdAt).toLocaleDateString("es-ES") : "N/A"}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center space-x-2">
                         <button
-                          onClick={() => handleDeleteUser(user.id)}
-                          className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg"
-                          title="Eliminar usuario"
+                          onClick={() => navigate(`/admin/users/${user.id}`)}
+                          className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+                          title="Ver detalles"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                           </svg>
                         </button>
-                      )}
+                        
+                        <button
+                          onClick={() => handleEditUser(user)}
+                          className="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg"
+                          title="Editar usuario"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
+                        
+                        {user.id !== currentUser?.id && (
+                          <button
+                            onClick={() => handleDeleteUser(user.id)}
+                            className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg"
+                            title="Eliminar usuario"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="px-6 py-12 text-center">
+                    <div className="text-gray-500">
+                      <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-2.5l-2.5 2.5m-5-5l-2.5 2.5" />
+                      </svg>
+                      <p className="mt-4 text-lg font-medium">No se encontraron usuarios</p>
+                      <p className="mt-2">Intenta cambiar los filtros o crear un nuevo usuario.</p>
                     </div>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -397,10 +422,8 @@ function EditUserModal({ user, onClose, onSave }) {
   const [formData, setFormData] = useState({
     fullName: user.fullName || "",
     email: user.email || "",
-    phoneNumber: user.phoneNumber || "",
-    role: user.role || "Student",
-    active: user.active || false,
-    verified: user.verified || false
+    role: user.role || "User",
+    isActive: user.isActive || false
   });
 
   const handleSubmit = (e) => {
@@ -411,10 +434,8 @@ function EditUserModal({ user, onClose, onSave }) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        {/* Overlay */}
         <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={onClose}></div>
 
-        {/* Modal */}
         <div className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div className="bg-white px-6 pt-6 pb-6">
             <div className="flex items-center justify-between mb-6">
@@ -451,50 +472,29 @@ function EditUserModal({ user, onClose, onSave }) {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Teléfono</label>
-                  <input
-                    type="tel"
-                    value={formData.phoneNumber}
-                    onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  />
-                </div>
-
-                <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Rol</label>
                   <select
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                   >
+                    <option value="User">Usuario</option>
                     <option value="Student">Estudiante</option>
                     <option value="Mentor">Mentor</option>
                     <option value="Employer">Empleador</option>
                     <option value="Admin">Administrador</option>
                   </select>
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
+                <div className="space-y-2 flex items-end">
                   <label className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={formData.active}
-                      onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+                      checked={formData.isActive}
+                      onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
                       className="w-4 h-4 text-gray-900 rounded focus:ring-gray-900"
                     />
                     <span className="ml-2 text-sm text-gray-700">Usuario activo</span>
-                  </label>
-
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={formData.verified}
-                      onChange={(e) => setFormData({ ...formData, verified: e.target.checked })}
-                      className="w-4 h-4 text-gray-900 rounded focus:ring-gray-900"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">Verificado</span>
                   </label>
                 </div>
               </div>
@@ -527,8 +527,7 @@ function CreateAdminModal({ onClose, onCreate }) {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    password: "",
-    phoneNumber: ""
+    password: ""
   });
 
   const handleSubmit = (e) => {
@@ -585,16 +584,7 @@ function CreateAdminModal({ onClose, onCreate }) {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                     required
                     minLength="6"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Teléfono</label>
-                  <input
-                    type="tel"
-                    value={formData.phoneNumber}
-                    onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    placeholder="Mínimo 6 caracteres"
                   />
                 </div>
               </div>
@@ -625,7 +615,7 @@ function CreateAdminModal({ onClose, onCreate }) {
                 >
                   Crear Administrador
                 </button>
-              </div>
+                </div>
             </form>
           </div>
         </div>

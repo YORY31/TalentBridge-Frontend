@@ -1,12 +1,59 @@
+// usersServices.js
 import axios from "axios";
+import { getToken } from "./authServices";
+
+// 🔹 IMPORTANTE: Usa la URL correcta de tu backend
+const API_URL = "https://localhost:7051/api";
+
+// Configurar axios para usar la URL base
+const apiClient = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
+
+// Interceptor para agregar token automáticamente
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // 🔹 Obtener todos los usuarios
 export const getAllUsers = async () => {
   try {
-    const response = await axios.get(`/api/Users`);
-    return response.data;
+    console.log("Obteniendo usuarios de:", `${API_URL}/Users`);
+    const response = await apiClient.get(`/Users`);
+    
+    console.log("Respuesta completa:", response);
+    console.log("Estructura de datos:", response.data);
+    
+    // Tu API devuelve { success: true, data: [...], count: ... }
+    if (response.data && response.data.success && Array.isArray(response.data.data)) {
+      console.log("Usuarios encontrados:", response.data.data.length);
+      return response.data.data;  // ← Devuelve solo el array de usuarios
+    }
+    
+    console.warn("Estructura de respuesta inesperada:", response.data);
+    return [];
+    
   } catch (error) {
-    console.error("Error al obtener usuarios:", error);
+    console.error("Error completo al obtener usuarios:", error);
+    
+    if (error.response) {
+      console.error("Status:", error.response.status);
+      console.error("Data:", error.response.data);
+      console.error("Headers:", error.response.headers);
+    }
+    
     throw error;
   }
 };
@@ -14,21 +61,16 @@ export const getAllUsers = async () => {
 // 🔹 Obtener usuario por ID
 export const getUserById = async (id) => {
   try {
-    const response = await axios.get(`/api/Users/${id}`);
-    return response.data;
+    const response = await apiClient.get(`/Users/${id}`);
+    
+    if (response.data && response.data.success && response.data.data) {
+      return response.data.data;
+    }
+    
+    return null;
+    
   } catch (error) {
     console.error("Error al obtener usuario:", error);
-    throw error;
-  }
-};
-
-// 🔹 Crear usuario
-export const createUser = async (userData) => {
-  try {
-    const response = await axios.post(`/api/Users`, userData);
-    return response.data;
-  } catch (error) {
-    console.error("Error al crear usuario:", error);
     throw error;
   }
 };
@@ -36,8 +78,12 @@ export const createUser = async (userData) => {
 // 🔹 Actualizar usuario
 export const updateUser = async (id, userData) => {
   try {
-    const response = await axios.put(`/api/Users/${id}`, userData);
+    console.log("Actualizando usuario", id, "con datos:", userData);
+    const response = await apiClient.put(`/Users/${id}`, userData);
+    
+    console.log("Respuesta de actualización:", response.data);
     return response.data;
+    
   } catch (error) {
     console.error("Error al actualizar usuario:", error);
     throw error;
@@ -47,7 +93,12 @@ export const updateUser = async (id, userData) => {
 // 🔹 Eliminar usuario
 export const deleteUser = async (id) => {
   try {
-    await axios.delete(`/api/Users/${id}`);
+    console.log("Eliminando usuario:", id);
+    const response = await apiClient.delete(`/Users/${id}`);
+    
+    console.log("Respuesta de eliminación:", response);
+    return { success: true };
+    
   } catch (error) {
     console.error("Error al eliminar usuario:", error);
     throw error;
@@ -57,8 +108,12 @@ export const deleteUser = async (id) => {
 // 🔹 Crear admin
 export const createAdmin = async (adminData) => {
   try {
-    const response = await axios.post(`/api/Users/admin`, adminData);
+    console.log("Creando admin con datos:", adminData);
+    const response = await apiClient.post(`/Users/admin`, adminData);
+    
+    console.log("Respuesta de creación admin:", response.data);
     return response.data;
+    
   } catch (error) {
     console.error("Error al crear admin:", error);
     throw error;
