@@ -51,7 +51,7 @@ export default function Layout({ children }) {
                 Comunidades
               </Link>
               <Link
-                to="/perfil"
+                to="/src/pages/Profile.jsx"
                 className="text-sm font-medium text-secondary hover:text-primary transition-colors"
               >
                 Perfil
