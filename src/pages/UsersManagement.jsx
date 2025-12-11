@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import AdminLayout from "../../components/admin/AdminLayout";
 import { 
   getAllUsers, 
   updateUser, 
   deleteUser,
   createAdmin 
-} from "../../services/usersService";
-import { getCurrentUser } from "../../services/authServices";
+} from "../services/usersServices";
+import { getCurrentUser } from "../services/authServices";
 
 export default function UsersManagement() {
   const [users, setUsers] = useState([]);
@@ -134,16 +133,14 @@ export default function UsersManagement() {
 
   if (loading) {
     return (
-      <AdminLayout>
-        <div className="flex justify-center items-center min-h-[60vh]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-        </div>
-      </AdminLayout>
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
     );
   }
 
   return (
-    <AdminLayout>
+    <>
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
         <div>
@@ -242,7 +239,7 @@ export default function UsersManagement() {
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Rol</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Estado</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Verificación</th>
-                <th className="px6 py-4 text-left text-sm font-semibold text-gray-900">Registro</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Registro</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Acciones</th>
               </tr>
             </thead>
@@ -391,7 +388,7 @@ export default function UsersManagement() {
           onCreate={handleCreateAdmin}
         />
       )}
-    </AdminLayout>
+    </>
   );
 }
 

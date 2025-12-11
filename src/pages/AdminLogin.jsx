@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../../services/authServices";
+import { loginUser, isAdmin } from "../services/authServices"; // Importar isAdmin
 
-export default function AdminLogin() {
+export default function AdminLogin({ setIsAdminLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -37,17 +37,24 @@ export default function AdminLogin() {
       
       const result = await loginUser(credentials);
       
-      // Verificar que el usuario sea admin
-      const user = result.user || result.data?.user;
-      if (user?.role !== "Admin") {
+      // Verificar que el usuario sea admin usando la función isAdmin
+      if (!isAdmin()) {
         setMessage("Acceso denegado. Solo administradores pueden acceder.");
+        // Limpiar localStorage si no es admin
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("tokenExpiration");
         return;
       }
       
       console.log("Login exitoso:", result);
       setMessage("✅ Acceso concedido. Redirigiendo...");
+      
+      // IMPORTANTE: Actualizar el estado de autenticación
+      if (setIsAdminLoggedIn) {
+        setIsAdminLoggedIn(true);
+      }
       
       // Guardar preferencia "recordarme"
       if (rememberMe) {
@@ -56,6 +63,7 @@ export default function AdminLogin() {
         localStorage.removeItem("adminRemember");
       }
       
+      // CORRECCIÓN: Redirigir a la ruta correcta
       setTimeout(() => navigate("/admin/dashboard"), 1500);
       
     } catch (error) {

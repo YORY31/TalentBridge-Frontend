@@ -7,30 +7,66 @@ import Home from "./pages/Home";
 import CvUpload from "./pages/CvUpload";
 import Comunidades from "./pages/Comunidades";
 import Profile from "./pages/Profile";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import UsersManagement from "./pages/UsersManagement";
+import AdminLayout from "./components/AdminLayout";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
 
   return (
     <Router>
       <Routes>
         {/* Rutas públicas */}
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+        <Route 
+          path="/login/admin" 
+          element={<AdminLogin setIsAdminLoggedIn={setIsAdminLoggedIn} />} 
+        />
         <Route path="/register" element={<Register />} />
 
-        {/* Rutas protegidas */}
+        {/* Rutas protegidas para usuarios normales */}
         <Route path="/" element={isLoggedIn ? <Home setIsLoggedIn={setIsLoggedIn} /> : <Navigate to="/login" />} />
         <Route path="/cv" element={isLoggedIn ? <CvUpload /> : <Navigate to="/login" />} />
         <Route path="/comunidades" element={isLoggedIn ? <Comunidades /> : <Navigate to="/login" />} />
         <Route path="/perfil" element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} />
 
+        {/* Rutas protegidas para administradores - USANDO AdminLayout */}
+        <Route 
+          path="/admin/dashboard" 
+          element={
+            isAdminLoggedIn ? 
+            <AdminLayout><AdminDashboard setIsAdminLoggedIn={setIsAdminLoggedIn} /></AdminLayout> : 
+            <Navigate to="/login/admin" />
+          } 
+        />
+        
+        <Route 
+          path="/admin/usuarios" 
+          element={
+            isAdminLoggedIn ? 
+            <AdminLayout><UsersManagement /></AdminLayout> : 
+            <Navigate to="/login/admin" />
+          } 
+        />
+
+        {/* Redirigir /admin a /admin/dashboard */}
+        <Route 
+          path="/admin" 
+          element={
+            isAdminLoggedIn ? 
+            <Navigate to="/admin/dashboard" /> : 
+            <Navigate to="/login/admin" />
+          } 
+        />
+
         {/* Redirigir cualquier ruta desconocida */}
-        <Route path="*" element={<Navigate to={isLoggedIn ? "/" : "/login"} />} />
+        <Route path="*" element={<Navigate to={isLoggedIn || isAdminLoggedIn ? "/" : "/login"} />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
-
