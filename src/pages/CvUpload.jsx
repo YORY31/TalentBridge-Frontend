@@ -4,7 +4,7 @@ import Layout from "../components/Layout";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Configuración Gemini
-const API_KEY = "AIzaSyCsV4QVb_ip7O0kGg7HmEmOX2pCQH2WZu0";
+const API_KEY = "AIzaSyAGIt8kTVSj9GERMW6ua5Sncisg-0sDqcI";
 const MODEL = "gemini-2.0-flash-exp";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
