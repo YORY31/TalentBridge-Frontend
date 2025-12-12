@@ -3,18 +3,18 @@ import { useState } from "react";
 
 import Login from "./pages/Login";
 import Register from "./pages/register";
-import Home from "./pages/Home";
-import CvUpload from "./pages/CvUpload";
-import Comunidades from "./pages/Comunidades";
-import Jobs from "./pages/Jobs";
-import Profile from "./pages/Profile";
+import Home from "./pages/user/start/Home";
+import CvUpload from "./pages/user/cvs/CvUpload";
+import Comunidades from "./pages/user/community/Comunidades";
+import Jobs from "./pages/user/jobs/Jobs";
+import Profile from "./pages/user/profile/Profile";
 import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
-import UsersManagement from "./pages/UsersManagement";
-import ComunityManagement from "./pages/ComunityManagement";
+import AdminDashboard from "./pages/admin/dashboard/AdminDashboard";
+import UsersManagement from "./pages/admin/users/UsersManagement";
+import ComunityManagement from "./pages/admin/community/ComunityManagement";
 import AdminLayout from "./components/AdminLayout";
-import AdminPanel from "./pages/AdminPanel";
-import JobsManagement from "./pages/JobsManagement";
+import AdminPanel from "./pages/admin/panel/AdminPanel";
+import JobsManagement from "./pages/admin/jobs/JobsManagement";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

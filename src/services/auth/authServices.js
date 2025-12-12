@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "./apiConfing";
+import { API_URL } from "../config/apiConfing";
 
 // 🔹 Registro
 export const registerUser = async (userData) => {

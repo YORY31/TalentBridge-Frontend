@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 // 🔹 Obtener todas las comunidades
 export const getAllCommunities = async () => {
   try {

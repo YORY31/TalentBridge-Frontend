@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { marked } from "marked";
-import Layout from "../components/Layout";
+import Layout from "../../../components/Layout";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Configuración Gemini (sin cambios)

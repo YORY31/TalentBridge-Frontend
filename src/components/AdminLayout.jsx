@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { getCurrentUser, logout, isAdmin } from "../services/authServices";
+import { getCurrentUser, logout, isAdmin } from "../services/auth/authServices";
 
 export default function AdminLayout({ children }) {
   const [user, setUser] = useState(null);

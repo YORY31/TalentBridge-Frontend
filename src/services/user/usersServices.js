@@ -1,6 +1,6 @@
 // usersServices.js
 import axios from "axios";
-import { getToken } from "./authServices";
+import { getToken } from "../auth/authServices";
 
 // 🔹 IMPORTANTE: Usa la URL correcta de tu backend
 const API_URL = "http://localhost:5169/api";

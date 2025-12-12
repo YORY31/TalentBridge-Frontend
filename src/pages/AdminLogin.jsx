@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, isAdmin } from "../services/authServices";
+import { loginUser, isAdmin } from "../services/auth/authServices";
 
 export default function AdminLogin({ setIsAdminLoggedIn }) {
   const [email, setEmail] = useState("");

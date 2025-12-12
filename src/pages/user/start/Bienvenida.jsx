@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProfile } from "../services/authServices";
+import { getProfile } from "../../../services/auth/authServices";
 
 export default function Bienvenida() {
   const [userName, setUserName] = useState("");

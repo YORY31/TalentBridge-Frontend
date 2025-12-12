@@ -5,8 +5,8 @@ import {
   updateUser, 
   deleteUser,
   createAdmin 
-} from "../services/usersServices";
-import { getCurrentUser } from "../services/authServices";
+} from "../../../services/user/usersServices";
+import { getCurrentUser } from "../../../services/auth/authServices";
 
 export default function UsersManagement() {
   const [users, setUsers] = useState([]);

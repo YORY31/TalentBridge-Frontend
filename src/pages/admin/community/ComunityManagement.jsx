@@ -8,7 +8,7 @@ import {
   getCommunityMembers,
   removeMember,
   updateMemberRole
-} from "../services/communitiesService";
+} from "../../../services/communities/communitiesService";
 
 export default function CommunityManagement() {
   const [communities, setCommunities] = useState([]);
