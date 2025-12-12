@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react"
 import Layout from "../../../components/Layout"
+import jsPDF from "jspdf"
+import "jspdf-autotable"
 
 export default function Profile() {
   // Estados principales
@@ -192,23 +194,253 @@ export default function Profile() {
     localStorage.setItem("joinedCommunities", JSON.stringify(updated))
   }
 
-  // Función para descargar CV
+  // Función para generar y descargar PDF
   const handleDownloadCV = () => {
-    const cvData = {
-      profile: userProfile,
-      skills: skills,
-      experience: experience,
-      education: education,
-      communities: mySavedCommunities,
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    })
+
+    // Configuración de colores
+    const primaryColor = [139, 92, 246] // Purple (#8b5cf6)
+    const secondaryColor = [217, 70, 239] // Fuchsia (#d946ef)
+
+    // Encabezado del CV
+    doc.setFillColor(...primaryColor)
+    doc.rect(0, 0, 210, 40, 'F')
+    
+    // Nombre
+    doc.setFontSize(28)
+    doc.setTextColor(255, 255, 255)
+    doc.setFont('helvetica', 'bold')
+    doc.text(userProfile.name, 20, 25)
+    
+    // Título profesional
+    doc.setFontSize(16)
+    doc.setTextColor(230, 230, 255)
+    doc.setFont('helvetica', 'normal')
+    doc.text(userProfile.title, 20, 35)
+
+    // Información de contacto
+    let yPos = 55
+    
+    doc.setFontSize(12)
+    doc.setTextColor(0, 0, 0)
+    doc.setFont('helvetica', 'bold')
+    doc.text("INFORMACIÓN DE CONTACTO", 20, yPos)
+    yPos += 10
+
+    doc.setFont('helvetica', 'normal')
+    doc.text(`📧 ${userProfile.email}`, 20, yPos)
+    yPos += 7
+    doc.text(`📱 ${userProfile.phone}`, 20, yPos)
+    yPos += 7
+    doc.text(`📍 ${userProfile.location}`, 20, yPos)
+    yPos += 7
+    doc.text(`🔗 ${userProfile.website}`, 20, yPos)
+    yPos += 7
+    doc.text(`💼 LinkedIn: ${userProfile.linkedin}`, 20, yPos)
+    yPos += 12
+
+    // Biografía
+    doc.setFont('helvetica', 'bold')
+    doc.text("PERFIL PROFESIONAL", 20, yPos)
+    yPos += 7
+    
+    doc.setFont('helvetica', 'normal')
+    const splitBio = doc.splitTextToSize(userProfile.bio, 170)
+    doc.text(splitBio, 20, yPos)
+    yPos += splitBio.length * 7 + 10
+
+    // Experiencia profesional
+    if (experience.length > 0) {
+      doc.setFont('helvetica', 'bold')
+      doc.text("EXPERIENCIA PROFESIONAL", 20, yPos)
+      yPos += 10
+
+      experience.forEach((exp, index) => {
+        if (yPos > 250) {
+          doc.addPage()
+          yPos = 20
+        }
+
+        doc.setFont('helvetica', 'bold')
+        doc.setTextColor(...primaryColor)
+        doc.text(exp.position, 20, yPos)
+        
+        doc.setFont('helvetica', 'normal')
+        doc.setTextColor(100, 100, 100)
+        doc.text(exp.company, 20, yPos + 6)
+        
+        doc.setTextColor(150, 150, 150)
+        doc.setFontSize(10)
+        doc.text(exp.duration, 20, yPos + 12)
+        
+        doc.setFontSize(11)
+        doc.setTextColor(0, 0, 0)
+        const splitDesc = doc.splitTextToSize(exp.description || "", 170)
+        doc.text(splitDesc, 20, yPos + 18)
+        
+        yPos += 18 + (splitDesc.length * 5) + 10
+      })
+      yPos += 5
     }
-    const dataStr = JSON.stringify(cvData, null, 2)
-    const dataBlob = new Blob([dataStr], { type: "application/json" })
-    const url = URL.createObjectURL(dataBlob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `CV_${userProfile.name.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.json`
-    link.click()
-    URL.revokeObjectURL(url)
+
+    // Educación
+    if (education.length > 0) {
+      if (yPos > 250) {
+        doc.addPage()
+        yPos = 20
+      }
+
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(0, 0, 0)
+      doc.setFontSize(12)
+      doc.text("EDUCACIÓN", 20, yPos)
+      yPos += 10
+
+      education.forEach((edu, index) => {
+        if (yPos > 250) {
+          doc.addPage()
+          yPos = 20
+        }
+
+        doc.setFont('helvetica', 'bold')
+        doc.setTextColor(...secondaryColor)
+        doc.text(edu.degree, 20, yPos)
+        
+        doc.setFont('helvetica', 'normal')
+        doc.setTextColor(100, 100, 100)
+        doc.text(edu.institution, 20, yPos + 6)
+        
+        doc.setTextColor(150, 150, 150)
+        doc.setFontSize(10)
+        doc.text(edu.year, 20, yPos + 12)
+        
+        if (edu.description) {
+          doc.setFontSize(11)
+          doc.setTextColor(0, 0, 0)
+          const splitDesc = doc.splitTextToSize(edu.description, 170)
+          doc.text(splitDesc, 20, yPos + 18)
+          yPos += 18 + (splitDesc.length * 5)
+        } else {
+          yPos += 15
+        }
+        
+        yPos += 10
+      })
+    }
+
+    // Habilidades
+    if (skills.length > 0) {
+      if (yPos > 250) {
+        doc.addPage()
+        yPos = 20
+      }
+
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(0, 0, 0)
+      doc.setFontSize(12)
+      doc.text("HABILIDADES", 20, yPos)
+      yPos += 10
+
+      const skillsPerRow = 3
+      const skillWidth = 55
+      const skillHeight = 20
+      
+      skills.forEach((skill, index) => {
+        if (yPos > 250) {
+          doc.addPage()
+          yPos = 20
+        }
+
+        const row = Math.floor(index / skillsPerRow)
+        const col = index % skillsPerRow
+        
+        const xPos = 20 + (col * (skillWidth + 10))
+        const currentYPos = yPos + (row * (skillHeight + 5))
+
+        // Fondo del cuadro de habilidad
+        doc.setFillColor(245, 245, 255)
+        doc.roundedRect(xPos, currentYPos, skillWidth, skillHeight, 3, 3, 'F')
+        
+        // Borde
+        doc.setDrawColor(...primaryColor)
+        doc.setLineWidth(0.5)
+        doc.roundedRect(xPos, currentYPos, skillWidth, skillHeight, 3, 3)
+        
+        // Nombre de la habilidad
+        doc.setFont('helvetica', 'bold')
+        doc.setTextColor(...primaryColor)
+        doc.setFontSize(11)
+        doc.text(skill.name, xPos + 5, currentYPos + 8)
+        
+        // Nivel
+        doc.setFont('helvetica', 'normal')
+        doc.setTextColor(100, 100, 100)
+        doc.setFontSize(9)
+        const levelText = skill.level === "expert" ? "Experto" : "Avanzado"
+        doc.text(`Nivel: ${levelText}`, xPos + 5, currentYPos + 14)
+        
+        // Endorsements
+        doc.setTextColor(150, 150, 150)
+        doc.text(`${skill.endorsements} endorsements`, xPos + 5, currentYPos + 18)
+
+        // Actualizar yPos si estamos en la última fila
+        if (index === skills.length - 1) {
+          const totalRows = Math.ceil(skills.length / skillsPerRow)
+          yPos += (totalRows * (skillHeight + 5)) + 10
+        }
+      })
+    }
+
+    // Comunidades (si hay espacio)
+    if (mySavedCommunities.length > 0 && yPos < 250) {
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(0, 0, 0)
+      doc.setFontSize(12)
+      doc.text("COMUNIDADES", 20, yPos)
+      yPos += 10
+
+      mySavedCommunities.forEach((community, index) => {
+        if (yPos > 250) return // No agregar si no hay espacio
+        
+        doc.setFont('helvetica', 'bold')
+        doc.setTextColor(...primaryColor)
+        doc.setFontSize(10)
+        doc.text(community.name, 20, yPos)
+        
+        doc.setFont('helvetica', 'normal')
+        doc.setTextColor(100, 100, 100)
+        doc.setFontSize(9)
+        doc.text(`${community.category} • ${community.members.toLocaleString()} miembros`, 20, yPos + 5)
+        
+        yPos += 12
+      })
+    }
+
+    // Pie de página
+    const pageCount = doc.internal.getNumberOfPages()
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i)
+      doc.setFontSize(8)
+      doc.setTextColor(150, 150, 150)
+      doc.text(
+        `Generado el ${new Date().toLocaleDateString('es-ES', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })} • Página ${i} de ${pageCount}`,
+        105,
+        290,
+        { align: 'center' }
+      )
+    }
+
+    // Descargar el PDF
+    const fileName = `CV_${userProfile.name.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`
+    doc.save(fileName)
   }
 
   const getColorClasses = (color) => {
