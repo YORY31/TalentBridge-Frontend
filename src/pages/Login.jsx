@@ -58,64 +58,90 @@ export default function Login({ setIsLoggedIn }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 relative overflow-hidden">
-
-      <div className="relative z-10 w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Sección izquierda - Branding */}
-        <div className="space-y-8 px-4">
-          <div className="space-y-4">
-            <h1 className="text-6xl lg:text-7xl font-black tracking-tight text-gray-800">
-              TalentBridge
-            </h1>
-            
-            <p className="text-2xl lg:text-3xl font-bold text-gray-900">
-              Conecta con tu futuro profesional
-            </p>
-          </div>
-
-          <p className="text-lg text-gray-600 leading-relaxed">
-            Descubre una comunidad de apoyo y encuentra las mejores oportunidades de pasantías.
-          </p>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-6 pt-8">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-700">500+</div>
-              <div className="text-sm text-gray-500 mt-1">Empresas</div>
+    <div className="min-h-screen bg-background-main flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDE2djI4YzAtMS4xLS45LTItMi0ySDIwYy0xLjEgMC0yIC45LTIgMlYxNmMwLTEuMSAuOS0yIDItMmgxNGMxLjEgMCAyIC45IDIgMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-5"></div>
+      
+      <div className="relative z-10 w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4">
+        
+        {/* Branding Section - Left */}
+        <div className="text-center lg:text-left">
+          <div className="space-y-6">
+            {/* Logo */}
+            <div className="flex flex-col items-center lg:items-start">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-accent-purple to-accent-fuchsia rounded-2xl mb-6">
+                <span className="material-symbols-outlined text-4xl text-white">handshake</span>
+              </div>
+              
+              <h1 className="text-5xl lg:text-6xl font-black text-text-primary mb-4">
+                Talent<span className="bg-gradient-to-r from-accent-purple to-accent-fuchsia bg-clip-text text-transparent">Bridge</span>
+              </h1>
+              
+              <p className="text-2xl font-bold text-text-primary mb-6">
+                Conecta con tu futuro profesional
+              </p>
+              
+              <p className="text-lg text-text-secondary max-w-md leading-relaxed">
+                Descubre una comunidad de apoyo y encuentra las mejores oportunidades de pasantías.
+              </p>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-700">10K+</div>
-              <div className="text-sm text-gray-500 mt-1">Estudiantes</div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-4 pt-8 max-w-md mx-auto lg:mx-0">
+              <div className="text-center bg-background-header backdrop-blur-md border border-accent-purple/10 rounded-xl p-4">
+                <div className="text-2xl font-bold bg-gradient-to-r from-accent-purple to-accent-fuchsia bg-clip-text text-transparent">500+</div>
+                <div className="text-sm text-text-secondary mt-1">Empresas</div>
+              </div>
+              <div className="text-center bg-background-header backdrop-blur-md border border-accent-purple/10 rounded-xl p-4">
+                <div className="text-2xl font-bold bg-gradient-to-r from-accent-fuchsia to-accent-pink bg-clip-text text-transparent">10K+</div>
+                <div className="text-sm text-text-secondary mt-1">Estudiantes</div>
+              </div>
+              <div className="text-center bg-background-header backdrop-blur-md border border-accent-purple/10 rounded-xl p-4">
+                <div className="text-2xl font-bold bg-gradient-to-r from-accent-pink to-accent-purple bg-clip-text text-transparent">95%</div>
+                <div className="text-sm text-text-secondary mt-1">Satisfacción</div>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-700">95%</div>
-              <div className="text-sm text-gray-500 mt-1">Satisfacción</div>
+
+            {/* Testimonial */}
+            <div className="pt-8 max-w-md mx-auto lg:mx-0">
+              <div className="bg-background-header backdrop-blur-md border border-accent-purple/10 rounded-xl p-6">
+                <p className="text-text-secondary italic mb-4">
+                  "Gracias a TalentBridge conseguí mi primera pasantía en una empresa tecnológica líder."
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-accent-purple to-accent-fuchsia"></div>
+                  <div>
+                    <p className="text-sm font-medium text-text-primary">María González</p>
+                    <p className="text-xs text-text-secondary">Desarrolladora Frontend</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Formulario */}
+        {/* Form Section - Right */}
         <div className="w-full max-w-md mx-auto">
-          <div className="bg-white p-8 lg:p-10 rounded-3xl shadow-2xl border border-gray-200">
-            {/* Header del formulario */}
+          <div className="bg-background-header backdrop-blur-md border-2 border-accent-purple/20 rounded-2xl p-8 shadow-2xl">
+            {/* Form Header */}
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                Iniciar sesión
+              <h2 className="text-3xl font-bold text-text-primary mb-2">
+                Iniciar Sesión
               </h2>
-              <p className="text-gray-600 text-sm">
+              <p className="text-text-secondary text-sm">
                 Bienvenido de nuevo a TalentBridge
               </p>
             </div>
 
-            <div className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 block">
+                <label className="text-sm font-medium text-text-primary block">
                   Correo electrónico
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                    <svg className="w-5 h-5 text-gray-400 group-focus-within:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-text-secondary group-focus-within:text-accent-purple transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
@@ -125,19 +151,28 @@ export default function Login({ setIsLoggedIn }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isLoading}
-                    className="w-full bg-white border border-gray-300 rounded-xl pl-12 pr-4 py-3.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-background-main backdrop-blur-sm border-2 border-accent-purple/10 rounded-xl pl-12 pr-4 py-3.5 text-text-primary placeholder-text-secondary focus:outline-none focus:border-accent-purple transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
 
-              {/* Contraseña */}
+              {/* Password */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 block">
-                  Contraseña
-                </label>
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-medium text-text-primary block">
+                    Contraseña
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => navigate("/forgot-password")}
+                    className="text-xs text-accent-purple hover:text-accent-fuchsia transition-colors hover:underline"
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </button>
+                </div>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                    <svg className="w-5 h-5 text-gray-400 group-focus-within:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-text-secondary group-focus-within:text-accent-purple transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                   </div>
@@ -147,12 +182,12 @@ export default function Login({ setIsLoggedIn }) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isLoading}
-                    className="w-full bg-white border border-gray-300 rounded-xl pl-12 pr-12 py-3.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-background-main backdrop-blur-sm border-2 border-accent-purple/10 rounded-xl pl-12 pr-12 py-3.5 text-text-primary placeholder-text-secondary focus:outline-none focus:border-accent-purple transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-gray-700 transition-colors"
+                    className="absolute inset-y-0 right-4 flex items-center text-text-secondary hover:text-accent-purple transition-colors"
                   >
                     {showPassword ? (
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,22 +203,22 @@ export default function Login({ setIsLoggedIn }) {
                 </div>
               </div>
 
-              {/* Mensaje */}
+              {/* Message */}
               {message && (
-                <div className={`p-4 rounded-xl text-sm font-medium ${
+                <div className={`p-4 rounded-xl text-sm font-medium border ${
                   message.includes("✅") || message.includes("exitoso")
-                    ? "bg-green-50 text-green-700 border border-green-200"
-                    : "bg-red-50 text-red-700 border border-red-200"
+                    ? "bg-green-900/20 text-green-400 border-green-400/20"
+                    : "bg-red-900/20 text-red-400 border-red-400/20"
                 }`}>
                   {message}
                 </div>
               )}
 
-              {/* Botón */}
+              {/* Submit Button */}
               <button
-                onClick={handleSubmit}
+                type="submit"
                 disabled={isLoading}
-                className="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-accent-purple to-accent-fuchsia hover:from-accent-fuchsia hover:to-accent-purple text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg shadow-accent-purple/30 hover:shadow-accent-fuchsia/30 flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <>
@@ -203,27 +238,59 @@ export default function Login({ setIsLoggedIn }) {
                 )}
               </button>
 
-              {/* Link al registro */}
-              <div className="text-center pt-4">
-                <p className="text-gray-600 text-sm">
-                  ¿No tienes una cuenta?{" "}
-                  <button 
-                    onClick={() => navigate("/register")}
-                    className="text-gray-700 hover:text-gray-900 font-semibold transition-colors hover:underline"
-                  >
-                    Regístrate
-                  </button>
-                </p>
+              {/* Divider */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-accent-purple/20"></div>
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="px-2 bg-background-header text-text-secondary">O continúa con</span>
+                </div>
               </div>
+
+              {/* Social Login */}
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  className="py-3 border-2 border-accent-purple/10 text-text-primary font-medium rounded-xl hover:border-accent-purple/30 hover:bg-accent-purple/5 transition-all flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"/>
+                  </svg>
+                  Google
+                </button>
+                <button
+                  type="button"
+                  className="py-3 border-2 border-accent-purple/10 text-text-primary font-medium rounded-xl hover:border-accent-purple/30 hover:bg-accent-purple/5 transition-all flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  GitHub
+                </button>
+              </div>
+            </form>
+
+            {/* Link to Register */}
+            <div className="text-center pt-6 mt-6 border-t border-accent-purple/20">
+              <p className="text-text-secondary text-sm">
+                ¿No tienes una cuenta?{" "}
+                <button 
+                  onClick={() => navigate("/register")}
+                  className="text-accent-purple hover:text-accent-fuchsia font-semibold transition-colors hover:underline"
+                >
+                  Regístrate aquí
+                </button>
+              </p>
             </div>
           </div>
 
-          {/* Términos */}
-          <p className="text-center text-xs text-gray-500 mt-6">
+          {/* Terms */}
+          <p className="text-center text-xs text-text-secondary mt-6">
             Al iniciar sesión, aceptas nuestros{" "}
-            <button className="text-gray-700 hover:underline">Términos de servicio</button>
+            <button className="text-accent-purple hover:text-accent-fuchsia hover:underline">Términos de servicio</button>
             {" "}y{" "}
-            <button className="text-gray-700 hover:underline">Política de privacidad</button>
+            <button className="text-accent-purple hover:text-accent-fuchsia hover:underline">Política de privacidad</button>
           </p>
         </div>
       </div>

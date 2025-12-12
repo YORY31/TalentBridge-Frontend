@@ -6,11 +6,15 @@ import Register from "./pages/register";
 import Home from "./pages/Home";
 import CvUpload from "./pages/CvUpload";
 import Comunidades from "./pages/Comunidades";
+import Jobs from "./pages/Jobs";
 import Profile from "./pages/Profile";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import UsersManagement from "./pages/UsersManagement";
+import ComunityManagement from "./pages/ComunityManagement";
 import AdminLayout from "./components/AdminLayout";
+import AdminPanel from "./pages/AdminPanel";
+import JobsManagement from "./pages/JobsManagement";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,6 +35,7 @@ function App() {
         <Route path="/" element={isLoggedIn ? <Home setIsLoggedIn={setIsLoggedIn} /> : <Navigate to="/login" />} />
         <Route path="/cv" element={isLoggedIn ? <CvUpload /> : <Navigate to="/login" />} />
         <Route path="/comunidades" element={isLoggedIn ? <Comunidades /> : <Navigate to="/login" />} />
+        <Route path="/jobs" element={isLoggedIn ? <Jobs /> : <Navigate to="/login" />} />
         <Route path="/perfil" element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} />
 
         {/* Rutas protegidas para administradores - USANDO AdminLayout */}
@@ -48,6 +53,33 @@ function App() {
           element={
             isAdminLoggedIn ? 
             <AdminLayout><UsersManagement /></AdminLayout> : 
+            <Navigate to="/login/admin" />
+          } 
+        />
+
+        <Route 
+          path="/admin/cominidades" 
+          element={
+            isAdminLoggedIn ? 
+            <AdminLayout><ComunityManagement /></AdminLayout> : 
+            <Navigate to="/login/admin" />
+          } 
+        />
+
+        <Route 
+          path="/admin/jobs" 
+          element={
+            isAdminLoggedIn ? 
+            <AdminLayout><JobsManagement /></AdminLayout> : 
+            <Navigate to="/login/admin" />
+          } 
+        />
+
+        <Route 
+          path="/admin/panel" 
+          element={
+            isAdminLoggedIn ? 
+            <AdminLayout><AdminPanel /></AdminLayout> : 
             <Navigate to="/login/admin" />
           } 
         />

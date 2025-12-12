@@ -11,13 +11,13 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background-light font-display text-primary">
-      <header className="sticky top-0 z-10 bg-background-light shadow-sm">
+    <div className="flex flex-col min-h-screen bg-background-main text-text-primary">
+      <header className="sticky top-0 z-10 bg-background-header backdrop-blur-md shadow-lg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center gap-4">
-              <div className="text-primary">
+              <div className="text-accent-purple">
                 <svg
                   className="h-8 w-8"
                   fill="currentColor"
@@ -27,32 +27,38 @@ export default function Layout({ children }) {
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 13.08l-2.58-2.58L9.34 11l2.16 2.16L16.42 8.5l1.42 1.42L10.5 15.08z"></path>
                 </svg>
               </div>
-              <h1 className="text-xl font-bold text-primary">TalentBridge</h1>
+              <h1 className="text-xl font-bold text-text-primary">TalentBridge</h1>
             </div>
 
             {/* Barra de navegación */}
             <nav className="hidden md:flex items-center gap-6">
               <Link
                 to="/"
-                className="text-sm font-medium text-primary border-b-2 border-primary pb-1"
+                className="text-sm font-medium text-text-primary border-b-2 border-accent-purple pb-1"
               >
                 Inicio
               </Link>
               <Link
                 to="/cv"
-                className="text-sm font-medium text-secondary hover:text-primary transition-colors"
+                className="text-sm font-medium text-text-secondary hover:text-text-hover transition-colors"
               >
                 CV
               </Link>
               <Link
                 to="/comunidades"
-                className="text-sm font-medium text-secondary hover:text-primary transition-colors"
+                className="text-sm font-medium text-text-secondary hover:text-text-hover transition-colors"
               >
                 Comunidades
               </Link>
               <Link
+                to="/Jobs"
+                className="text-sm font-medium text-text-secondary hover:text-text-hover transition-colors"
+              >
+                Vacantes
+              </Link>
+              <Link
                 to="/perfil"
-                className="text-sm font-medium text-secondary hover:text-primary transition-colors"
+                className="text-sm font-medium text-text-secondary hover:text-text-hover transition-colors"
               >
                 Perfil
               </Link>
@@ -61,16 +67,16 @@ export default function Layout({ children }) {
             {/* Icono usuario / notificaciones y cerrar sesión */}
             <div className="flex items-center gap-4">
               <button
-                className="relative rounded-full p-2 text-secondary hover:bg-black/5 hover:text-primary transition-colors"
+                className="relative rounded-full p-2 text-text-secondary hover:bg-background-purple/30 hover:text-text-hover transition-colors"
                 onClick={handleLogout}
               >
                 <span className="material-symbols-outlined">logout</span>
               </button>
-              <button className="relative rounded-full p-2 text-secondary hover:bg-black/5 hover:text-primary transition-colors">
+              <button className="relative rounded-full p-2 text-text-secondary hover:bg-background-purple/30 hover:text-text-hover transition-colors">
                 <span className="material-symbols-outlined">notifications</span>
               </button>
               <div
-                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-accent-purple/50"
                 style={{
                   backgroundImage:
                     'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDA3Nkm-ZQFjsZTfAYiCImamCzpey-TSjZDgFMpZxMHxMm19_jqD_7jo8clPaFHeEroQg9PvU_o1NzbXHpdSj0R_hzClc2gXTBx9aOAej7YdlQGUIM9IsyQ3GJWDhqmpBpthqR_Aue6avzpAy218MeqsJHEy0TPcX9rZoz-jKLMhEg4Pnin7WDta9SqHDFHAxqI1vh6qXEZW0qXCSJaiWWFyKYBVyDFTHvvIpdlCQ6-oUDOfpjbxNwgWIPYwKIgsIeMdHSQrd2DFo")',
@@ -88,4 +94,3 @@ export default function Layout({ children }) {
     </div>
   );
 }
-

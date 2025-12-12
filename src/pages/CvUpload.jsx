@@ -3,7 +3,7 @@ import { marked } from "marked";
 import Layout from "../components/Layout";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Configuración Gemini
+// Configuración Gemini (sin cambios)
 const API_KEY = "AIzaSyAGIt8kTVSj9GERMW6ua5Sncisg-0sDqcI";
 const MODEL = "gemini-2.0-flash-exp";
 const genAI = new GoogleGenerativeAI(API_KEY);
@@ -37,7 +37,7 @@ export default function CVUpload() {
   const [dragActive, setDragActive] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   
-  // Estados para el analisis IA
+  // Estados para el análisis IA (sin cambios)
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [analysisError, setAnalysisError] = useState(null);
@@ -157,66 +157,73 @@ export default function CVUpload() {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-primary mb-2">
-            Sube tu Currículum
-          </h2>
-          <p className="text-secondary text-lg">
-            Déjanos tu CV para futuras vacantes y sé de los primeros en ser
-            visto por las empresas
-          </p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
-            <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-4xl text-blue-500">
-                visibility
-              </span>
-              <div>
-                <p className="text-2xl font-bold text-primary">2.5x</p>
-                <p className="text-sm text-secondary">Más visibilidad</p>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Hero Header Section */}
+        <div className="relative bg-gradient-to-br from-background-purple via-background-violet to-background-main py-12 mb-12 rounded-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2djI4YzAtMS4xLS45LTItMi0ySDIwYy0xLjEgMC0yIC45LTIgMlYxNmMwLTEuMSAuOS0yIDItMmgxNGMxLjEgMCAyIC45IDIgMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-30"></div>
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-4 bg-accent-purple/20 rounded-2xl backdrop-blur-sm">
+                <span className="material-symbols-outlined text-5xl text-accent-purple">description</span>
               </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
-            <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-4xl text-green-500">
-                trending_up
-              </span>
               <div>
-                <p className="text-2xl font-bold text-primary">80%</p>
-                <p className="text-sm text-secondary">Más oportunidades</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm border-l-4 border-purple-500">
-            <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-4xl text-purple-500">
-                rocket_launch
-              </span>
-              <div>
-                <p className="text-2xl font-bold text-primary">24h</p>
-                <p className="text-sm text-secondary">Respuesta rápida</p>
+                <h1 className="text-5xl font-bold text-text-primary mb-2">Sube tu Currículum</h1>
+                <p className="text-xl text-text-secondary max-w-2xl">
+                  Déjanos tu CV para futuras vacantes y sé de los primeros en ser visto por las empresas
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Upload Section */}
-        <div className="bg-white rounded-lg shadow-sm p-8">
+        {/* Stats Cards Modernizadas */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+          <div className="relative bg-gradient-to-br from-background-header to-background-main backdrop-blur-md p-6 rounded-2xl border-2 border-accent-purple/20 hover:border-accent-purple/40 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent-purple/10">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-accent-purple/20 rounded-xl backdrop-blur-sm">
+                <span className="material-symbols-outlined text-3xl text-accent-purple">visibility</span>
+              </div>
+              <div>
+                <p className="text-2xl font-bold bg-gradient-to-r from-accent-purple to-accent-fuchsia bg-clip-text text-transparent">2.5x</p>
+                <p className="text-sm text-text-secondary">Más visibilidad</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative bg-gradient-to-br from-background-header to-background-main backdrop-blur-md p-6 rounded-2xl border-2 border-accent-fuchsia/20 hover:border-accent-fuchsia/40 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent-fuchsia/10">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-accent-fuchsia/20 rounded-xl backdrop-blur-sm">
+                <span className="material-symbols-outlined text-3xl text-accent-fuchsia">trending_up</span>
+              </div>
+              <div>
+                <p className="text-2xl font-bold bg-gradient-to-r from-accent-fuchsia to-accent-pink bg-clip-text text-transparent">80%</p>
+                <p className="text-sm text-text-secondary">Más oportunidades</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative bg-gradient-to-br from-background-header to-background-main backdrop-blur-md p-6 rounded-2xl border-2 border-accent-pink/20 hover:border-accent-pink/40 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent-pink/10">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-accent-pink/20 rounded-xl backdrop-blur-sm">
+                <span className="material-symbols-outlined text-3xl text-accent-pink">rocket_launch</span>
+              </div>
+              <div>
+                <p className="text-2xl font-bold bg-gradient-to-r from-accent-pink to-accent-purple bg-clip-text text-transparent">24h</p>
+                <p className="text-sm text-text-secondary">Respuesta rápida</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Upload Section */}
+        <div className="bg-background-header backdrop-blur-md border-2 border-accent-purple/20 rounded-2xl p-8 mb-8">
           <form onSubmit={handleSubmit}>
-            {/* Drag & Drop Zone */}
+            {/* Drag & Drop Zone Mejorada */}
             <div
-              className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-all duration-300 ${
+              className={`relative border-4 border-dashed rounded-2xl p-12 text-center transition-all duration-300 ${
                 dragActive
-                  ? "border-primary bg-blue-50"
-                  : "border-gray-300 hover:border-primary"
+                  ? "border-accent-purple bg-accent-purple/10 shadow-2xl shadow-accent-purple/20"
+                  : "border-accent-purple/20 hover:border-accent-purple/40 hover:shadow-xl"
               }`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
@@ -232,242 +239,256 @@ export default function CVUpload() {
               />
 
               {!file ? (
-                <>
-                  <span className="material-symbols-outlined text-6xl text-gray-400 mb-4">
-                    cloud_upload
-                  </span>
-                  <h3 className="text-xl font-semibold text-primary mb-2">
+                <div className="space-y-4">
+                  <div className="p-4 bg-accent-purple/10 rounded-2xl inline-block">
+                    <span className="material-symbols-outlined text-6xl text-accent-purple">
+                      cloud_upload
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-text-primary mb-2">
                     Arrastra tu CV aquí
                   </h3>
-                  <p className="text-secondary mb-4">
+                  <p className="text-text-secondary text-lg mb-6">
                     o haz clic para seleccionar un archivo
                   </p>
                   <label
                     htmlFor="file-upload"
-                    className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-medium cursor-pointer hover:bg-primary/90 transition-colors"
+                    className="inline-flex items-center gap-3 bg-gradient-to-r from-accent-purple to-accent-fuchsia text-white px-8 py-4 rounded-xl font-semibold cursor-pointer hover:shadow-lg hover:shadow-accent-purple/30 transition-all transform hover:scale-105"
                   >
-                    <span className="material-symbols-outlined">
-                      description
-                    </span>
+                    <span className="material-symbols-outlined">description</span>
                     Seleccionar archivo
                   </label>
-                  <p className="text-sm text-gray-500 mt-4">
+                  <p className="text-sm text-text-secondary mt-6">
                     PDF, DOC o DOCX (máx. 5MB)
                   </p>
-                </>
+                </div>
               ) : (
-                <div className="flex items-center justify-center gap-4">
-                  <span className="material-symbols-outlined text-5xl text-green-500">
-                    check_circle
-                  </span>
-                  <div className="text-left">
-                    <p className="text-lg font-semibold text-primary">
+                <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+                  <div className="p-4 bg-green-500/20 rounded-2xl">
+                    <span className="material-symbols-outlined text-5xl text-green-500">
+                      check_circle
+                    </span>
+                  </div>
+                  <div className="text-left flex-1">
+                    <p className="text-xl font-semibold text-text-primary mb-1">
                       {file.name}
                     </p>
-                    <p className="text-sm text-secondary">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                    <p className="text-text-secondary mb-2">
+                      {(file.size / 1024 / 1024).toFixed(2)} MB • {file.type}
                     </p>
+                    <div className="flex items-center gap-4 mt-3">
+                      <button
+                        type="button"
+                        onClick={clearFile}
+                        className="flex items-center gap-2 text-accent-pink hover:text-accent-pink/80 transition-colors"
+                      >
+                        <span className="material-symbols-outlined">delete</span>
+                        Cambiar archivo
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={clearFile}
-                    className="ml-4 text-red-500 hover:text-red-700"
-                  >
-                    <span className="material-symbols-outlined">delete</span>
-                  </button>
                 </div>
               )}
             </div>
 
-            {/* Botón Analizar con IA */}
+            {/* Botón Analizar con IA Mejorado */}
             {file && file.type === "application/pdf" && !analysisResult && (
-              <div className="mt-6">
+              <div className="mt-8">
                 <button
                   type="button"
                   onClick={analyzeCV}
                   disabled={isAnalyzing}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-4 rounded-lg font-medium hover:from-indigo-600 hover:to-purple-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-accent-purple to-accent-fuchsia text-white px-8 py-5 rounded-xl font-semibold hover:shadow-2xl hover:shadow-accent-purple/30 transition-all transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   {isAnalyzing ? (
                     <>
-                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      Analizando tu CV...
+                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                      Analizando tu CV con IA...
                     </>
                   ) : (
                     <>
-                      <span className="material-symbols-outlined">auto_awesome</span>
-                      Analizar CV con IA
+                      <span className="material-symbols-outlined text-xl">auto_awesome</span>
+                      Analizar CV con Inteligencia Artificial
                     </>
                   )}
                 </button>
+                <p className="text-center text-text-secondary text-sm mt-3">
+                  Nuestra IA revisará tu CV y te dará feedback instantáneo
+                </p>
               </div>
             )}
 
-            {/* Error del análisis */}
+            {/* Error del análisis Mejorado */}
             {analysisError && (
-              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
-                <span className="material-symbols-outlined text-red-600">error</span>
-                <p className="text-red-800">{analysisError}</p>
+              <div className="mt-6 p-6 bg-gradient-to-br from-accent-pink/10 to-accent-purple/10 border-2 border-accent-pink/30 rounded-2xl flex items-start gap-4">
+                <span className="material-symbols-outlined text-3xl text-accent-pink">error</span>
+                <div className="flex-1">
+                  <p className="font-semibold text-text-primary mb-1">Error en el análisis</p>
+                  <p className="text-text-secondary">{analysisError}</p>
+                </div>
               </div>
             )}
 
-            {/* Resultados del análisis */}
+            {/* Resultados del análisis Mejorados */}
             {analysisResult && (
-              <div className="mt-6 bg-gradient-to-br from-slate-50 to-indigo-50 border border-indigo-200 rounded-lg overflow-hidden">
-                <div className="bg-gradient-to-r from-indigo-500 to-purple-500 px-6 py-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-white text-2xl">psychology</span>
-                    <h3 className="text-white font-semibold text-lg">Análisis de tu CV</h3>
+              <div className="mt-8 border-2 border-accent-purple/30 rounded-2xl overflow-hidden bg-gradient-to-b from-background-header to-background-main">
+                <div className="bg-gradient-to-r from-accent-purple to-accent-fuchsia px-8 py-5 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <span className="material-symbols-outlined text-white text-3xl">psychology</span>
+                    <div>
+                      <h3 className="text-white font-bold text-xl">Análisis de IA</h3>
+                      <p className="text-white/80 text-sm">Feedback profesional de tu CV</p>
+                    </div>
                   </div>
-                  <span className="bg-white/20 text-white text-xs font-medium px-3 py-1 rounded-full">
-                    ✓ Completado
+                  <span className="bg-white/20 text-white text-sm font-semibold px-4 py-1.5 rounded-full flex items-center gap-2">
+                    <span className="material-symbols-outlined text-sm">check_circle</span>
+                    Completado
                   </span>
                 </div>
                 <div 
-                  className="p-6 prose prose-sm max-w-none prose-headings:text-indigo-900 prose-headings:font-semibold prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-indigo-600"
+                  className="p-8 prose prose-lg max-w-none 
+                    prose-headings:text-text-primary prose-headings:font-bold prose-headings:border-b prose-headings:border-accent-purple/20 prose-headings:pb-2
+                    prose-p:text-text-secondary prose-p:leading-relaxed
+                    prose-ul:text-text-secondary prose-ul:space-y-2
+                    prose-li:text-text-secondary prose-li:flex prose-li:items-start prose-li:gap-2
+                    prose-strong:text-accent-purple prose-strong:font-semibold
+                    prose-code:bg-accent-purple/10 prose-code:text-accent-purple prose-code:px-2 prose-code:py-1 prose-code:rounded
+                    before:prose-li:content-['•'] before:prose-li:text-accent-fuchsia before:prose-li:font-bold before:prose-li:text-lg"
                   dangerouslySetInnerHTML={{ __html: marked.parse(analysisResult) }}
                 />
-                <div className="px-6 pb-4">
+                <div className="px-8 pb-6 border-t border-accent-purple/20 pt-4">
                   <button
                     type="button"
                     onClick={() => setAnalysisResult(null)}
-                    className="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1"
+                    className="text-accent-purple hover:text-accent-fuchsia font-medium flex items-center gap-2 transition-colors"
                   >
-                    <span className="material-symbols-outlined text-sm">refresh</span>
-                    Analizar de nuevo
+                    <span className="material-symbols-outlined text-lg">refresh</span>
+                    Analizar otro archivo
                   </button>
                 </div>
               </div>
             )}
 
-            {/* Benefits Section */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-primary text-2xl">
-                  verified
-                </span>
+            {/* Benefits Section Mejorada */}
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-start gap-4 p-5 bg-background-purple/20 backdrop-blur-sm rounded-2xl border border-accent-purple/20">
+                <div className="p-2.5 bg-accent-purple/20 rounded-lg">
+                  <span className="material-symbols-outlined text-xl text-accent-purple">verified</span>
+                </div>
                 <div>
-                  <h4 className="font-semibold text-primary mb-1">
-                    Prioridad en vacantes
-                  </h4>
-                  <p className="text-sm text-secondary">
-                    Las empresas verán tu perfil primero cuando publiquen nuevas
-                    oportunidades
+                  <h4 className="font-bold text-text-primary mb-2">Prioridad en vacantes</h4>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    Las empresas verán tu perfil primero cuando publiquen nuevas oportunidades
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-primary text-2xl">
-                  notifications_active
-                </span>
+              <div className="flex items-start gap-4 p-5 bg-background-violet/20 backdrop-blur-sm rounded-2xl border border-accent-fuchsia/20">
+                <div className="p-2.5 bg-accent-fuchsia/20 rounded-lg">
+                  <span className="material-symbols-outlined text-xl text-accent-fuchsia">notifications_active</span>
+                </div>
                 <div>
-                  <h4 className="font-semibold text-primary mb-1">
-                    Alertas personalizadas
-                  </h4>
-                  <p className="text-sm text-secondary">
-                    Te notificaremos cuando haya vacantes que coincidan con tu
-                    perfil
+                  <h4 className="font-bold text-text-primary mb-2">Alertas personalizadas</h4>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    Te notificaremos cuando haya vacantes que coincidan con tu perfil
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-primary text-2xl">
-                  security
-                </span>
+              <div className="flex items-start gap-4 p-5 bg-pink-900/20 backdrop-blur-sm rounded-2xl border border-accent-pink/20">
+                <div className="p-2.5 bg-accent-pink/20 rounded-lg">
+                  <span className="material-symbols-outlined text-xl text-accent-pink">security</span>
+                </div>
                 <div>
-                  <h4 className="font-semibold text-primary mb-1">
-                    100% Confidencial
-                  </h4>
-                  <p className="text-sm text-secondary">
-                    Tu información está segura y solo la verán empresas
-                    verificadas
+                  <h4 className="font-bold text-text-primary mb-2">100% Confidencial</h4>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    Tu información está segura y solo la verán empresas verificadas
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <span className="material-symbols-outlined text-primary text-2xl">
-                  auto_awesome
-                </span>
+              <div className="flex items-start gap-4 p-5 bg-accent-purple/10 backdrop-blur-sm rounded-2xl border border-accent-purple/30">
+                <div className="p-2.5 bg-accent-purple/30 rounded-lg">
+                  <span className="material-symbols-outlined text-xl text-accent-purple">auto_awesome</span>
+                </div>
                 <div>
-                  <h4 className="font-semibold text-primary mb-1">
-                    Análisis automático
-                  </h4>
-                  <p className="text-sm text-secondary">
-                    Nuestro sistema analiza tu CV y te sugiere mejoras para
-                    destacar
+                  <h4 className="font-bold text-text-primary mb-2">Análisis automático</h4>
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    Nuestro sistema analiza tu CV y te sugiere mejoras para destacar
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit Button Mejorado */}
             {file && (
-              <div className="mt-8 flex justify-end gap-4">
+              <div className="mt-12 flex flex-col sm:flex-row justify-end gap-4 pt-8 border-t border-accent-purple/20">
                 <button
                   type="button"
                   onClick={clearFile}
-                  className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="px-8 py-3.5 border-2 border-accent-purple/30 text-accent-purple rounded-xl font-semibold hover:bg-accent-purple/10 transition-all"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                  className="flex items-center gap-3 bg-gradient-to-r from-accent-purple to-accent-fuchsia text-white px-10 py-3.5 rounded-xl font-semibold hover:shadow-2xl hover:shadow-accent-purple/30 transition-all transform hover:scale-105"
                 >
-                  <span className="material-symbols-outlined">upload</span>
-                  Subir CV
+                  <span className="material-symbols-outlined text-xl">upload</span>
+                  Subir CV a mi perfil
                 </button>
               </div>
             )}
 
-            {/* Success Message */}
+            {/* Success Message Mejorado */}
             {uploadSuccess && (
-              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
-                <span className="material-symbols-outlined text-green-600">
-                  check_circle
-                </span>
-                <p className="text-green-800 font-medium">
-                  ¡CV subido exitosamente! Las empresas ya pueden ver tu perfil.
-                </p>
+              <div className="mt-6 p-6 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-2 border-green-500/30 rounded-2xl flex items-center gap-4">
+                <span className="material-symbols-outlined text-3xl text-green-500">check_circle</span>
+                <div className="flex-1">
+                  <p className="font-bold text-text-primary mb-1">¡CV subido exitosamente!</p>
+                  <p className="text-text-secondary">
+                    Las empresas ya pueden ver tu perfil. Revisaremos tu CV y te notificaremos pronto.
+                  </p>
+                </div>
               </div>
             )}
           </form>
         </div>
 
-        {/* Tips Section */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <div className="flex items-start gap-3">
-            <span className="material-symbols-outlined text-blue-600 text-2xl">
-              lightbulb
-            </span>
-            <div>
-              <h3 className="font-semibold text-blue-900 mb-2">
-                💡 Consejos para tu CV
-              </h3>
-              <ul className="space-y-2 text-sm text-blue-800">
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-                  Mantén tu CV actualizado con tus últimas experiencias y habilidades
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-                  Usa un formato claro y profesional (PDF recomendado)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-                  Incluye palabras clave relacionadas con tu carrera
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-                  Revisa ortografía y gramática antes de subir
-                </li>
-              </ul>
+        {/* Tips Section Mejorada */}
+        <div className="bg-gradient-to-br from-accent-purple/10 via-accent-fuchsia/10 to-background-main backdrop-blur-md border-2 border-accent-purple/20 rounded-2xl p-8">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-accent-purple/20 rounded-xl">
+              <span className="material-symbols-outlined text-2xl text-accent-purple">lightbulb</span>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-text-primary mb-4">💡 Consejos profesionales para tu CV</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3">
+                  <span className="w-2 h-2 bg-accent-purple rounded-full mt-2.5"></span>
+                  <p className="text-text-secondary text-sm leading-relaxed">
+                    <span className="font-semibold text-text-primary">Formato profesional:</span> Usa PDF para preservar el formato en todos los dispositivos
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="w-2 h-2 bg-accent-fuchsia rounded-full mt-2.5"></span>
+                  <p className="text-text-secondary text-sm leading-relaxed">
+                    <span className="font-semibold text-text-primary">Actualización constante:</span> Mantén tu CV al día con experiencias y habilidades recientes
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="w-2 h-2 bg-accent-pink rounded-full mt-2.5"></span>
+                  <p className="text-text-secondary text-sm leading-relaxed">
+                    <span className="font-semibold text-text-primary">Palabras clave:</span> Incluye términos relevantes de tu industria para destacar en búsquedas
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="w-2 h-2 bg-accent-purple rounded-full mt=2.5"></span>
+                  <p className="text-text-secondary text-sm leading-relaxed">
+                    <span className="font-semibold text-text-primary">Revisión exhaustiva:</span> Corrige ortografía, gramática y verifica la información de contacto
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
