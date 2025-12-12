@@ -88,7 +88,7 @@ export default function Comunidades() {
       icon: "school",
       trending: false,
       color: "fuchsia"
-    },
+    }
   ]
 
   const handleJoinCommunity = (communityId) => {
@@ -141,9 +141,9 @@ export default function Comunidades() {
   return (
     <Layout>
       <div className="min-h-screen">
+
         {/* Hero Section */}
         <div className="relative bg-gradient-to-br from-background-purple via-background-violet to-background-main py-16 mb-12 rounded-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2djI4YzAtMS4xLS45LTItMi0ySDIwYy0xLjEgMC0yIC45LTIgMlYxNmMwLTEuMSAuOS0yIDItMmgxNGMxLjEgMCAyIC45IDIgMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-30"></div>
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-4 bg-accent-purple/20 rounded-2xl backdrop-blur-sm">
@@ -159,24 +159,38 @@ export default function Comunidades() {
           </div>
         </div>
 
+        {/* Main Container */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-          {/* Search Section */}
+
+          {/* Search + Create Button */}
           <div className="mb-12">
-            <div className="relative mb-8">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary text-2xl pointer-events-none">
-                search
-              </span>
-              <input
-                type="text"
-                placeholder="Buscar comunidades..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-14 pr-6 py-4 bg-background-header backdrop-blur-md border-2 border-accent-purple/20 rounded-xl text-base focus:outline-none focus:border-accent-purple text-text-primary placeholder-text-secondary transition-all shadow-lg"
-              />
+            <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+
+              {/* Search Bar */}
+              <div className="relative w-full md:max-w-xl">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                  <span className="material-symbols-outlined text-text-secondary text-2xl">search</span>
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="Buscar comunidades..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-14 pr-6 py-4 bg-background-header backdrop-blur-md border-2 border-accent-purple/20 rounded-xl text-base focus:outline-none focus:border-accent-purple text-text-primary placeholder-text-secondary transition-all shadow-lg text-center"
+                />
+              </div>
+
+              {/* Create Community Button */}
+              <button
+                className="px-6 py-4 bg-gradient-to-r from-accent-purple to-accent-fuchsia text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-all"
+              >
+                Crear comunidad
+              </button>
             </div>
 
             {/* Category Filters */}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 mt-6">
               {categories.map((category) => (
                 <button
                   key={category}
@@ -197,7 +211,6 @@ export default function Comunidades() {
           <div className="mb-8 flex justify-between items-center">
             <p className="text-text-secondary">
               {filteredCommunities.length} comunidad{filteredCommunities.length !== 1 ? "es" : ""} encontrada
-              {filteredCommunities.length !== 1 ? "s" : ""}
             </p>
             {joinedCommunities.length > 0 && (
               <span className="px-4 py-2 bg-background-purple/30 text-accent-purple rounded-full text-sm font-medium">
@@ -209,21 +222,26 @@ export default function Comunidades() {
           {/* Communities Grid */}
           {filteredCommunities.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
               {filteredCommunities.map((community) => {
                 const isJoined = joinedCommunities.includes(community.id)
                 const colorClasses = getColorClasses(community.color)
+
                 return (
                   <div
                     key={community.id}
                     className={`bg-background-header backdrop-blur-md border-2 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 ${
-                      isJoined ? `${colorClasses.border} ${colorClasses.shadow}` : "border-accent-purple/10 hover:border-accent-purple/30"
+                      isJoined
+                        ? `${colorClasses.border} ${colorClasses.shadow}`
+                        : "border-accent-purple/10 hover:border-accent-purple/30"
                     }`}
                   >
-                    {/* Icon & Trending Badge */}
+                    {/* Icon + Trending */}
                     <div className="flex items-start justify-between mb-4">
-                      <div className={`p-3 ${colorClasses.bg} rounded-xl backdrop-blur-sm`}>
+                      <div className={`p-3 ${colorClasses.bg} rounded-xl`}>
                         <span className={`material-symbols-outlined text-3xl ${colorClasses.icon}`}>{community.icon}</span>
                       </div>
+
                       {community.trending && (
                         <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-gradient-to-r from-accent-pink to-accent-fuchsia text-white shadow-lg animate-pulse">
                           <span className="material-symbols-outlined text-xs">local_fire_department</span>
@@ -232,22 +250,19 @@ export default function Comunidades() {
                       )}
                     </div>
 
-                    {/* Title & Category */}
                     <h3 className="text-lg font-bold text-text-primary mb-2">{community.name}</h3>
+
                     <span className={`inline-block text-xs font-medium ${colorClasses.icon} ${colorClasses.bg} px-3 py-1 rounded-full mb-3`}>
                       {community.category}
                     </span>
 
-                    {/* Description */}
                     <p className="text-text-secondary text-sm mb-6 line-clamp-2">{community.description}</p>
 
-                    {/* Members */}
                     <div className="flex items-center gap-2 text-text-secondary text-sm mb-6 border-t border-accent-purple/10 pt-4">
                       <span className="material-symbols-outlined text-lg">group</span>
                       <span className="font-medium">{community.members.toLocaleString()} miembros</span>
                     </div>
 
-                    {/* Join Button */}
                     <button
                       onClick={() => handleJoinCommunity(community.id)}
                       className={`w-full px-4 py-3 rounded-xl font-semibold text-sm transition-all transform hover:scale-105 ${
@@ -268,6 +283,7 @@ export default function Comunidades() {
                   </div>
                 )
               })}
+
             </div>
           ) : (
             <div className="bg-background-header backdrop-blur-md border-2 border-accent-purple/10 rounded-2xl p-12 text-center mb-12">
@@ -286,7 +302,7 @@ export default function Comunidades() {
             </div>
           )}
 
-          {/* Stats Section */}
+          {/* Footer Stats */}
           <div className="bg-gradient-to-br from-background-purple via-background-violet to-background-main backdrop-blur-md rounded-2xl p-8 grid grid-cols-1 sm:grid-cols-3 gap-8 border border-accent-purple/20">
             <div className="text-center">
               <p className="text-5xl font-bold bg-gradient-to-r from-accent-purple to-accent-fuchsia bg-clip-text text-transparent mb-2">
