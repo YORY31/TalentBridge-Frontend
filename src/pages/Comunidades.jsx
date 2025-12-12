@@ -1,20 +1,12 @@
-import { useState } from "react";
-import Layout from "../components/Layout";
+import { useState, useMemo } from "react"
+import Layout from "../components/Layout"
 
 export default function Comunidades() {
-  const [joinedCommunities, setJoinedCommunities] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Todas");
+  const [joinedCommunities, setJoinedCommunities] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("Todas")
 
-  const categories = [
-    "Todas",
-    "Tecnología",
-    "Negocios",
-    "Diseño",
-    "Marketing",
-    "Salud",
-    "Educación",
-  ];
+  const categories = ["Todas", "Tecnología", "Negocios", "Diseño", "Marketing", "Salud", "Educación"]
 
   const communities = [
     {
@@ -22,10 +14,8 @@ export default function Comunidades() {
       name: "Desarrolladores Full Stack",
       category: "Tecnología",
       members: 2847,
-      description:
-        "Comunidad de desarrolladores que comparten experiencias, proyectos y oportunidades laborales.",
-      image: "💻",
-      color: "blue",
+      description: "Comunidad de desarrolladores que comparten experiencias, proyectos y oportunidades laborales.",
+      icon: "code",
       trending: true,
     },
     {
@@ -33,10 +23,8 @@ export default function Comunidades() {
       name: "Diseño UX/UI",
       category: "Diseño",
       members: 1523,
-      description:
-        "Espacio para diseñadores que buscan feedback, recursos y networking profesional.",
-      image: "🎨",
-      color: "purple",
+      description: "Espacio para diseñadores que buscan feedback, recursos y networking profesional.",
+      icon: "palette",
       trending: true,
     },
     {
@@ -44,10 +32,8 @@ export default function Comunidades() {
       name: "Marketing Digital",
       category: "Marketing",
       members: 3201,
-      description:
-        "Profesionales del marketing compartiendo estrategias, tendencias y casos de éxito.",
-      image: "📱",
-      color: "pink",
+      description: "Profesionales del marketing compartiendo estrategias, tendencias y casos de éxito.",
+      icon: "trending_up",
       trending: false,
     },
     {
@@ -55,10 +41,8 @@ export default function Comunidades() {
       name: "Data Science & AI",
       category: "Tecnología",
       members: 1890,
-      description:
-        "Comunidad dedicada a ciencia de datos, machine learning e inteligencia artificial.",
-      image: "🤖",
-      color: "green",
+      description: "Comunidad dedicada a ciencia de datos, machine learning e inteligencia artificial.",
+      icon: "smart_toy",
       trending: true,
     },
     {
@@ -66,10 +50,8 @@ export default function Comunidades() {
       name: "Emprendedores Tech",
       category: "Negocios",
       members: 987,
-      description:
-        "Red de emprendedores tecnológicos compartiendo ideas, recursos y mentorías.",
-      image: "🚀",
-      color: "orange",
+      description: "Red de emprendedores tecnológicos compartiendo ideas, recursos y mentorías.",
+      icon: "rocket_launch",
       trending: false,
     },
     {
@@ -77,10 +59,8 @@ export default function Comunidades() {
       name: "Recursos Humanos",
       category: "Negocios",
       members: 1456,
-      description:
-        "Profesionales de RRHH discutiendo tendencias en reclutamiento y gestión del talento.",
-      image: "👥",
-      color: "indigo",
+      description: "Profesionales de RRHH discutiendo tendencias en reclutamiento y gestión del talento.",
+      icon: "group",
       trending: false,
     },
     {
@@ -88,10 +68,8 @@ export default function Comunidades() {
       name: "Enfermería y Salud",
       category: "Salud",
       members: 2103,
-      description:
-        "Comunidad de profesionales de la salud compartiendo conocimientos y experiencias.",
-      image: "🏥",
-      color: "red",
+      description: "Comunidad de profesionales de la salud compartiendo conocimientos y experiencias.",
+      icon: "local_hospital",
       trending: false,
     },
     {
@@ -99,109 +77,50 @@ export default function Comunidades() {
       name: "Educación Online",
       category: "Educación",
       members: 1678,
-      description:
-        "Educadores innovadores explorando nuevas metodologías y herramientas digitales.",
-      image: "📚",
-      color: "yellow",
+      description: "Educadores innovadores explorando nuevas metodologías y herramientas digitales.",
+      icon: "school",
       trending: false,
     },
-  ];
+  ]
 
   const handleJoinCommunity = (communityId) => {
     if (joinedCommunities.includes(communityId)) {
-      setJoinedCommunities(joinedCommunities.filter((id) => id !== communityId));
+      setJoinedCommunities(joinedCommunities.filter((id) => id !== communityId))
     } else {
-      setJoinedCommunities([...joinedCommunities, communityId]);
+      setJoinedCommunities([...joinedCommunities, communityId])
     }
-  };
+  }
 
-  const filteredCommunities = communities.filter((community) => {
-    const matchesSearch = community.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "Todas" || community.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-
-  const colorClasses = {
-    blue: "bg-blue-100 text-blue-600 border-blue-200",
-    purple: "bg-purple-100 text-purple-600 border-purple-200",
-    pink: "bg-pink-100 text-pink-600 border-pink-200",
-    green: "bg-green-100 text-green-600 border-green-200",
-    orange: "bg-orange-100 text-orange-600 border-orange-200",
-    indigo: "bg-indigo-100 text-indigo-600 border-indigo-200",
-    red: "bg-red-100 text-red-600 border-red-200",
-    yellow: "bg-yellow-100 text-yellow-600 border-yellow-200",
-  };
+  const filteredCommunities = useMemo(() => {
+    return communities.filter((community) => {
+      const searchLower = searchTerm.toLowerCase()
+      const matchesSearch =
+        community.name.toLowerCase().includes(searchLower) ||
+        community.description.toLowerCase().includes(searchLower) ||
+        community.category.toLowerCase().includes(searchLower)
+      const matchesCategory = selectedCategory === "Todas" || community.category === selectedCategory
+      return matchesSearch && matchesCategory
+    })
+  }, [searchTerm, selectedCategory])
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-primary mb-2">
-            Comunidades Profesionales
-          </h2>
-          <p className="text-secondary text-lg">
-            Únete a grupos de interés, comparte experiencias y amplía tu red
-            profesional
-          </p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-4xl text-blue-500">
-                groups
-              </span>
-              <div>
-                <p className="text-2xl font-bold text-primary">
-                  {communities.length}
-                </p>
-                <p className="text-sm text-secondary">Comunidades activas</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-4xl text-green-500">
-                person_check
-              </span>
-              <div>
-                <p className="text-2xl font-bold text-primary">
-                  {joinedCommunities.length}
-                </p>
-                <p className="text-sm text-secondary">Comunidades unidas</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-4xl text-purple-500">
-                forum
-              </span>
-              <div>
-                <p className="text-2xl font-bold text-primary">
-                  {communities
-                    .reduce((sum, c) => sum + c.members, 0)
-                    .toLocaleString()}
-                </p>
-                <p className="text-sm text-secondary">Miembros totales</p>
-              </div>
-            </div>
+      <div className="bg-white">
+        {/* Hero Section */}
+        <div className="bg-slate-900 text-white py-16">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 className="text-5xl font-bold mb-4">Comunidades Profesionales</h1>
+            <p className="text-xl text-slate-300 max-w-2xl">
+              Conecta con profesionales, comparte experiencias y expande tu red en comunidades de tu interés.
+            </p>
           </div>
         </div>
 
-        {/* Search and Filter Section */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4">
-            {/* Search Bar */}
-            <div className="flex-1 relative">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Search Section */}
+          <div className="mb-12">
+            <div className="relative mb-8">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-2xl pointer-events-none">
                 search
               </span>
               <input
@@ -209,20 +128,20 @@ export default function Comunidades() {
                 placeholder="Buscar comunidades..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full pl-14 pr-6 py-4 border-2 border-slate-200 rounded-lg text-base focus:outline-none focus:border-blue-500 text-slate-900 placeholder-slate-500 transition-colors"
               />
             </div>
 
-            {/* Category Filter */}
-            <div className="flex gap-2 flex-wrap">
+            {/* Category Filters */}
+            <div className="flex flex-wrap gap-3">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  className={`px-5 py-2.5 rounded-lg font-medium text-sm transition-all ${
                     selectedCategory === category
-                      ? "bg-primary text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-blue-600 text-white shadow-md"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                   }`}
                 >
                   {category}
@@ -230,140 +149,104 @@ export default function Comunidades() {
               ))}
             </div>
           </div>
-        </div>
 
-        {/* Communities Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCommunities.map((community) => {
-            const isJoined = joinedCommunities.includes(community.id);
-            return (
-              <div
-                key={community.id}
-                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200"
-              >
-                {/* Card Header */}
-                <div
-                  className={`p-6 ${colorClasses[community.color]} border-b-2`}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="text-5xl">{community.image}</div>
-                    {community.trending && (
-                      <span className="flex items-center gap-1 text-xs font-semibold bg-white/80 px-2 py-1 rounded-full">
-                        <span className="material-symbols-outlined text-sm">
-                          trending_up
-                        </span>
-                        Tendencia
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">
-                    {community.name}
-                  </h3>
-                  <span className="inline-block text-xs font-medium px-3 py-1 bg-white/80 rounded-full">
-                    {community.category}
-                  </span>
-                </div>
-
-                {/* Card Body */}
-                <div className="p-6">
-                  <p className="text-sm text-secondary mb-4 line-clamp-3">
-                    {community.description}
-                  </p>
-
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2 text-sm text-secondary">
-                      <span className="material-symbols-outlined text-base">
-                        group
-                      </span>
-                      <span className="font-medium">
-                        {community.members.toLocaleString()} miembros
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Join Button */}
-                  <button
-                    onClick={() => handleJoinCommunity(community.id)}
-                    className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
-                      isJoined
-                        ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        : "bg-primary text-white hover:bg-primary/90"
-                    }`}
-                  >
-                    <span className="material-symbols-outlined">
-                      {isJoined ? "check_circle" : "add_circle"}
-                    </span>
-                    {isJoined ? "Unido" : "Unirse"}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Empty State */}
-        {filteredCommunities.length === 0 && (
-          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-            <span className="material-symbols-outlined text-6xl text-gray-300 mb-4">
-              search_off
-            </span>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              No se encontraron comunidades
-            </h3>
-            <p className="text-secondary">
-              Intenta ajustar tu búsqueda o filtros
+          {/* Results Info */}
+          <div className="mb-8 flex justify-between items-center">
+            <p className="text-slate-600">
+              {filteredCommunities.length} comunidad{filteredCommunities.length !== 1 ? "es" : ""} encontrada
+              {filteredCommunities.length !== 1 ? "s" : ""}
             </p>
           </div>
-        )}
 
-        {/* Benefits Section */}
-        <div className="mt-12 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 border border-blue-200">
-          <h3 className="text-2xl font-bold text-primary mb-6 text-center">
-            ¿Por qué unirte a una comunidad?
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="text-center">
-              <span className="material-symbols-outlined text-5xl text-blue-600 mb-3">
-                handshake
-              </span>
-              <h4 className="font-semibold text-primary mb-2">Networking</h4>
-              <p className="text-sm text-secondary">
-                Conoce profesionales de tu área
-              </p>
+          {/* Communities Grid */}
+          {filteredCommunities.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {filteredCommunities.map((community) => {
+                const isJoined = joinedCommunities.includes(community.id)
+                return (
+                  <div
+                    key={community.id}
+                    className="border border-slate-200 rounded-xl p-6 hover:shadow-lg transition-shadow"
+                  >
+                    {/* Icon & Trending Badge */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="p-3 bg-blue-100 rounded-lg">
+                        <span className="material-symbols-outlined text-3xl text-blue-600">{community.icon}</span>
+                      </div>
+                      {community.trending && (
+                        <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-orange-100 text-orange-700">
+                          <span className="material-symbols-outlined text-xs">local_fire_department</span>
+                          Trending
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Title & Category */}
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">{community.name}</h3>
+                    <span className="inline-block text-xs font-medium text-blue-700 bg-blue-50 px-3 py-1 rounded-full mb-3">
+                      {community.category}
+                    </span>
+
+                    {/* Description */}
+                    <p className="text-slate-600 text-sm mb-6 line-clamp-2">{community.description}</p>
+
+                    {/* Members */}
+                    <div className="flex items-center gap-2 text-slate-600 text-sm mb-6 border-t border-slate-200 pt-4">
+                      <span className="material-symbols-outlined text-lg">group</span>
+                      <span className="font-medium">{community.members.toLocaleString()} miembros</span>
+                    </div>
+
+                    {/* Join Button */}
+                    <button
+                      onClick={() => handleJoinCommunity(community.id)}
+                      className={`w-full px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
+                        isJoined
+                          ? "bg-blue-600 text-white hover:bg-blue-700"
+                          : "border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+                      }`}
+                    >
+                      {isJoined ? "Guardado" : "Guardar"}
+                    </button>
+                  </div>
+                )
+              })}
             </div>
-
-            <div className="text-center">
-              <span className="material-symbols-outlined text-5xl text-green-600 mb-3">
-                school
-              </span>
-              <h4 className="font-semibold text-primary mb-2">Aprendizaje</h4>
-              <p className="text-sm text-secondary">
-                Comparte y adquiere conocimientos
-              </p>
+          ) : (
+            <div className="bg-slate-50 rounded-xl p-12 text-center mb-12">
+              <span className="material-symbols-outlined text-6xl text-slate-300 block mb-4">search_off</span>
+              <h3 className="text-2xl font-bold text-slate-900 mb-2">No hay comunidades que coincidan</h3>
+              <p className="text-slate-600 mb-8">Intenta cambiar tus filtros o búsqueda</p>
+              <button
+                onClick={() => {
+                  setSearchTerm("")
+                  setSelectedCategory("Todas")
+                }}
+                className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Ver todas las comunidades
+              </button>
             </div>
+          )}
 
-            <div className="text-center">
-              <span className="material-symbols-outlined text-5xl text-purple-600 mb-3">
-                work
-              </span>
-              <h4 className="font-semibold text-primary mb-2">Oportunidades</h4>
-              <p className="text-sm text-secondary">
-                Accede a ofertas exclusivas
-              </p>
+          {/* Stats Section */}
+          <div className="bg-slate-50 rounded-xl p-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div>
+              <p className="text-4xl font-bold text-blue-600 mb-1">{communities.length}</p>
+              <p className="text-slate-600">Comunidades activas</p>
             </div>
-
-            <div className="text-center">
-              <span className="material-symbols-outlined text-5xl text-orange-600 mb-3">
-                support_agent
-              </span>
-              <h4 className="font-semibold text-primary mb-2">Mentoría</h4>
-              <p className="text-sm text-secondary">
-                Encuentra guías en tu carrera
+            <div>
+              <p className="text-4xl font-bold text-blue-600 mb-1">{joinedCommunities.length}</p>
+              <p className="text-slate-600">En tu colección</p>
+            </div>
+            <div>
+              <p className="text-4xl font-bold text-blue-600 mb-1">
+                {(communities.reduce((sum, c) => sum + c.members, 0) / 1000).toFixed(1)}K+
               </p>
+              <p className="text-slate-600">Miembros totales</p>
             </div>
           </div>
         </div>
       </div>
     </Layout>
-  );
+  )
 }

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken } from "./authServices";
 
-const API_URL = "https://localhost:7051/api";
+const API_URL = "http://localhost:5169/api";
 
 // Configurar axios para usar la URL base
 const apiClient = axios.create({
