@@ -4,33 +4,20 @@ import Layout from "../../../components/Layout";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Configuración Gemini (sin cambios)
-const API_KEY = "AIzaSyAGIt8kTVSj9GERMW6ua5Sncisg-0sDqcI";
+const API_KEY = "AIzaSyAW858oFmc7PQtkBASVjdiT3zyYkOPy8L4";
 const MODEL = "gemini-2.0-flash-exp";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
-const SYSTEM_INSTRUCTION = `Eres un revisor de documentos directo y conciso. 
+const SYSTEM_INSTRUCTION = `Analiza el Currículum Vitae adjunto (CV) como si fueras un revisor de documentos estricto. Aplica las REGLAS y el FORMATO de la instrucción del sistema. 
 
-REGLAS:
-- Sé BREVE y al grano
-- NO des explicaciones largas
-- Usa bullets cortos
-- Si algo está bien, solo di "✓ Correcto" o "✓ Sin problemas"
+Tu evaluación debe incluir obligatoriamente:
+1.  **Feedback general** (conciso).
+2.  **Problemas a corregir** (cambios obligatorios).
+3.  **Sugerencias opcionales** (mejoras no urgentes).
+4.  **Puntos fuertes** (lo que hace bien).
 
-FORMATO DE RESPUESTA:
-
-## Feedback
-
-## Problemas a corregir
-- [Problema específico → Cómo arreglarlo]
-- [Solo lista lo que DEBE cambiar]
-
-## Sugerencias opcionales
-- [Mejoras que no son urgentes pero ayudarían]
-
-## Lo que está bien
-- [Lista breve de puntos fuertes]
-
-Si el documento está bien, simplemente dilo sin inventar problemas.`;
+Sé objetivo, breve y utiliza los bullets según se te ha indicado. Solo proporciona el contenido de las secciones solicitadas.
+`;
 
 export default function CVUpload() {
   const [file, setFile] = useState(null);
