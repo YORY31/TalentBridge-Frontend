@@ -184,7 +184,7 @@ export default function AdminLogin({ setIsAdminLoggedIn }) {
                   </div>
                   <input
                     type="email"
-                    placeholder="admin@talentbridge.com"
+                    placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isLoading}
