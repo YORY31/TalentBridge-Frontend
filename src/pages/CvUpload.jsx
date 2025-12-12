@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { marked } from "marked";
 import Layout from "../components/Layout";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Configuración Gemini
-const API_KEY = "AIzaSyD7CdJAXxAV3kb0OL_NDdicYOTYGnYC2qU";
+const API_KEY = "AIzaSyCsV4QVb_ip7O0kGg7HmEmOX2pCQH2WZu0";
 const MODEL = "gemini-2.0-flash-exp";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
@@ -36,9 +36,8 @@ export default function CVUpload() {
   const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [uploadError, setUploadError] = useState("");
   
-  // Estados para el análisis IA
+  // Estados para el analisis IA
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [analysisError, setAnalysisError] = useState(null);
@@ -59,39 +58,19 @@ export default function CVUpload() {
     setDragActive(false);
     
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      validateAndSetFile(e.dataTransfer.files[0]);
+      handleFileSelect(e.dataTransfer.files[0]);
     }
   };
 
   const handleChange = (e) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
-      validateAndSetFile(e.target.files[0]);
+      handleFileSelect(e.target.files[0]);
     }
   };
 
-  const validateAndSetFile = (selectedFile) => {
-    // Validar tipo de archivo
-    const allowedTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ];
-    
-    if (!allowedTypes.includes(selectedFile.type)) {
-      setUploadError("Solo se permiten archivos PDF, DOC o DOCX");
-      return;
-    }
-
-    // Validar tamaño (5MB máximo)
-    const maxSize = 5 * 1024 * 1024;
-    if (selectedFile.size > maxSize) {
-      setUploadError("El archivo no debe superar los 5MB");
-      return;
-    }
-
+  const handleFileSelect = (selectedFile) => {
     setFile(selectedFile);
-    setUploadError("");
     setAnalysisResult(null);
     setAnalysisError(null);
   };
@@ -100,22 +79,12 @@ export default function CVUpload() {
     setFile(null);
     setAnalysisResult(null);
     setAnalysisError(null);
-    setUploadError("");
-    setUploadSuccess(false);
   };
 
-  const fileToGenerativePart = async (file) => {
+  const fileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64Data = reader.result.split(",")[1];
-        resolve({
-          inlineData: {
-            data: base64Data,
-            mimeType: file.type
-          }
-        });
-      };
+      reader.onload = () => resolve(reader.result.split(",")[1]);
       reader.onerror = () => reject(new Error("Error al leer el archivo"));
       reader.readAsDataURL(file);
     });
@@ -135,16 +104,27 @@ export default function CVUpload() {
     setAnalysisError(null);
 
     try {
+      // Obtener el modelo con system instruction
       const model = genAI.getGenerativeModel({ 
         model: MODEL,
-        systemInstruction: SYSTEM_INSTRUCTION
+        systemInstruction: SYSTEM_INSTRUCTION 
       });
 
-      const filePart = await fileToGenerativePart(file);
+      // Convertir archivo a base64
+      const base64Data = await fileToBase64(file);
       
+      // Crear el objeto con el formato correcto para la API
+      const imagePart = {
+        inlineData: {
+          data: base64Data,
+          mimeType: "application/pdf"
+        }
+      };
+
+      // Generar contenido
       const result = await model.generateContent([
-        filePart,
-        { text: "Revisa este CV. Dime directo: ¿qué corregir? ¿qué mejorar? ¿está bien? Sé breve." }
+        imagePart,
+        "Revisa este CV. Dime directo: ¿qué corregir? ¿qué mejorar? ¿está bien? Sé breve."
       ]);
 
       const response = await result.response;
@@ -161,7 +141,7 @@ export default function CVUpload() {
       } else if (err.message?.includes("400")) {
         setAnalysisError("El archivo no pudo ser procesado. Intenta con otro PDF.");
       } else {
-        setAnalysisError("Ocurrió un error al analizar el documento. Por favor intenta nuevamente.");
+        setAnalysisError(`Ocurrió un error al analizar el documento: ${err.message}`);
       }
     } finally {
       setIsAnalyzing(false);
@@ -170,25 +150,9 @@ export default function CVUpload() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!file) {
-      setUploadError("Por favor selecciona un archivo");
-      return;
-    }
-
-    // Simulación de subida (solo frontend)
-    console.log("Archivo seleccionado:", {
-      nombre: file.name,
-      tamaño: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-      tipo: file.type
-    });
-
+    console.log("Archivo a subir:", file);
     setUploadSuccess(true);
-    
-    // Ocultar mensaje después de 5 segundos
-    setTimeout(() => {
-      setUploadSuccess(false);
-    }, 5000);
+    setTimeout(() => setUploadSuccess(false), 3000);
   };
 
   return (
@@ -315,14 +279,6 @@ export default function CVUpload() {
               )}
             </div>
 
-            {/* Error de validación */}
-            {uploadError && (
-              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
-                <span className="material-symbols-outlined text-red-600">error</span>
-                <p className="text-red-800">{uploadError}</p>
-              </div>
-            )}
-
             {/* Botón Analizar con IA */}
             {file && file.type === "application/pdf" && !analysisResult && (
               <div className="mt-6">
@@ -330,7 +286,7 @@ export default function CVUpload() {
                   type="button"
                   onClick={analyzeCV}
                   disabled={isAnalyzing}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-4 rounded-lg font-medium hover:from-indigo-600 hover:to-purple-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-4 rounded-lg font-medium hover:from-indigo-600 hover:to-purple-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isAnalyzing ? (
                     <>
@@ -338,7 +294,7 @@ export default function CVUpload() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                       </svg>
-                      Analizando tu CV con IA...
+                      Analizando tu CV...
                     </>
                   ) : (
                     <>
@@ -352,15 +308,15 @@ export default function CVUpload() {
 
             {/* Error del análisis */}
             {analysisError && (
-              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-                <span className="material-symbols-outlined text-red-600 flex-shrink-0">error</span>
+              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
+                <span className="material-symbols-outlined text-red-600">error</span>
                 <p className="text-red-800">{analysisError}</p>
               </div>
             )}
 
             {/* Resultados del análisis */}
             {analysisResult && (
-              <div className="mt-6 bg-gradient-to-br from-slate-50 to-indigo-50 border border-indigo-200 rounded-lg overflow-hidden shadow-lg">
+              <div className="mt-6 bg-gradient-to-br from-slate-50 to-indigo-50 border border-indigo-200 rounded-lg overflow-hidden">
                 <div className="bg-gradient-to-r from-indigo-500 to-purple-500 px-6 py-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-white text-2xl">psychology</span>
@@ -374,7 +330,7 @@ export default function CVUpload() {
                   className="p-6 prose prose-sm max-w-none prose-headings:text-indigo-900 prose-headings:font-semibold prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-indigo-600"
                   dangerouslySetInnerHTML={{ __html: marked.parse(analysisResult) }}
                 />
-                <div className="px-6 pb-4 flex gap-3">
+                <div className="px-6 pb-4">
                   <button
                     type="button"
                     onClick={() => setAnalysisResult(null)}
@@ -440,10 +396,11 @@ export default function CVUpload() {
                 </span>
                 <div>
                   <h4 className="font-semibold text-primary mb-1">
-                    Análisis con IA
+                    Análisis automático
                   </h4>
                   <p className="text-sm text-secondary">
-                    Nuestro sistema analiza tu CV con Gemini AI y te sugiere mejoras
+                    Nuestro sistema analiza tu CV y te sugiere mejoras para
+                    destacar
                   </p>
                 </div>
               </div>
@@ -461,10 +418,10 @@ export default function CVUpload() {
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-md hover:shadow-lg"
+                  className="flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                 >
                   <span className="material-symbols-outlined">upload</span>
-                  Guardar CV
+                  Subir CV
                 </button>
               </div>
             )}
@@ -476,7 +433,7 @@ export default function CVUpload() {
                   check_circle
                 </span>
                 <p className="text-green-800 font-medium">
-                  ¡CV guardado exitosamente! Las empresas ya pueden ver tu perfil.
+                  ¡CV subido exitosamente! Las empresas ya pueden ver tu perfil.
                 </p>
               </div>
             )}
@@ -491,7 +448,7 @@ export default function CVUpload() {
             </span>
             <div>
               <h3 className="font-semibold text-blue-900 mb-2">
-                Consejos para tu CV
+                💡 Consejos para tu CV
               </h3>
               <ul className="space-y-2 text-sm text-blue-800">
                 <li className="flex items-center gap-2">
